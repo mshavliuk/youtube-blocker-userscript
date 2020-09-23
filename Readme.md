@@ -1,4 +1,4 @@
-# [📺🚫] Youtube blocker userscript [📺🚫]
+# [📺🚫] Youtube blocker userscript
 
 // TODO: add proper description
 
@@ -13,6 +13,19 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 ## 👤 Authors
 
 [Mikhail Shavliuk](https://github.com/mshavliuk) and [contributors](https://github.com/https://github.com/mshavliuk/Youtube blocker userscript/graphs/contributors).
+
+## ✅ TODO
+
+- [ ] Initial settings [WIP]
+- [x] Compute remain/left time
+- [x] Add linters
+- [ ] Use TypeScript
+- [ ] Dark theme
+- [ ] Multiple language support
+- [ ] Unit tests
+- [ ] CI pipeline
+- [ ] Autoprefixer
+- [ ] Split to chunks and load lazily
 
 ## 📝 Licence
 
