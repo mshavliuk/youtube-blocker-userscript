@@ -4,7 +4,7 @@
 
 ## 🗄 Change log
 
-The change log can be found on the [Releases page](https://github.com/https://github.com/mshavliuk/Youtube blocker userscript/releases).
+The change log can be found on the [Releases page](https://github.com/mshavliuk/youtube-blocker-userscript/releases).
 
 ## 🤝 Contributing
 
@@ -12,7 +12,7 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 
 ## 👤 Authors
 
-[Mikhail Shavliuk](https://github.com/mshavliuk) and [contributors](https://github.com/https://github.com/mshavliuk/Youtube blocker userscript/graphs/contributors).
+[Mikhail Shavliuk](https://github.com/mshavliuk) and [contributors](https://github.com/mshavliuk/youtube-blocker-userscript/graphs/contributors).
 
 ## ✅ TODO
 
@@ -26,6 +26,8 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] CI pipeline
 - [ ] Autoprefixer
 - [ ] Split to chunks and load lazily
+- [ ] Categories/channels whitelist
+- [ ] Reduce distraction mode
 
 ## 📝 Licence
 
