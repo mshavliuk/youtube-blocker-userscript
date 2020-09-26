@@ -1,8 +1,12 @@
+import { Inject, Service } from "typedi";
+import { WINDOW_TOKEN } from "../window-token";
+
+@Service()
 export class Clock {
 	private readonly initialSpentTime: number;
 	private readonly createdAt: number;
 
-	constructor(private window: Window) {
+	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
 		const initialState = this.loadState();
 		if (initialState === null) {
 			this.initialSpentTime = 0;

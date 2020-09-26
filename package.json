@@ -46,7 +46,9 @@
   },
   "dependencies": {
     "@types/micromodal": "^0.3.2",
-    "micromodal": "^0.4.6"
+    "micromodal": "^0.4.6",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.8.0"
   },
   "husky": {
     "hooks": {

@@ -1,9 +1,12 @@
 import html from "./settings.html";
 import "./settings.scss";
 import { Modal } from "../modal";
+import { Inject, Service } from "typedi";
+import { WINDOW_TOKEN } from "../window-token";
 
+@Service()
 export class Settings {
-	constructor(private window: Window) {}
+	constructor(@Inject(WINDOW_TOKEN) private window: Window, private modal: Modal) {}
 
 	isSettingsSpecified() {
 		return !!this.getSettings();
@@ -18,14 +21,17 @@ export class Settings {
 		}
 	}
 
-	showSettingsDialog() {
-		const modal = new Modal(window);
+	public async showSettingsDialog () {
 		const template = document.createElement("template");
 		template.innerHTML = html;
-		modal.show("Settings", template);
-		modal.addOnClose((...args) => {
-			console.log(args);
-			console.log('settings were set!');
+
+		return new Promise((res) => {
+			this.modal.show("Settings", template);
+			this.modal.addOnClose((...args) => {
+				console.log(args);
+				console.log('settings were set!');
+				res();
+			})
 		})
 	}
 }

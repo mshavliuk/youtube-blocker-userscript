@@ -1,8 +1,13 @@
+import 'reflect-metadata';
 import { Clock } from "./clock";
 import { Settings } from "./settings";
 import { Modal } from "./modal";
+import { Container } from 'typedi';
+import { WINDOW_TOKEN } from "./window-token";
 
 (async function (window) {
+	Container.set(WINDOW_TOKEN, window);
+
 	const waitForBody = () => {
 		let counter = 0;
 		return new Promise((resolve) => {
@@ -20,18 +25,15 @@ import { Modal } from "./modal";
 
 	await waitForBody();
 
-	const main = () => {
-		console.log("run main");
-
-		const clock = new Clock(window);
-
+	const main = async () => {
+		const clock = Container.get(Clock);
 		window.addEventListener("beforeunload", () => {
 			clock.stop();
 		});
 
-		const settings = new Settings(window);
+		const settings = Container.get(Settings);
 		if(!settings.isSettingsSpecified()) {
-			settings.showSettingsDialog();
+			await settings.showSettingsDialog();
 		}
 
 		const todayDateString = new Date().toISOString().slice(0, 10);
@@ -53,7 +55,7 @@ import { Modal } from "./modal";
 
 		const blockTheSite = () => {
 			// destroyThePage();
-			const modal = new Modal(window);
+			const modal = Container.get(Modal);
 			modal.show(
 				"Let's get a grip!",
 				"You seem to visit this site in restricted time"
