@@ -116,7 +116,7 @@
 .micromodal-slide {
   display: none;
 
-  .is-open {
+  &.is-open {
     display: block;
   }
 
@@ -125,19 +125,19 @@
     will-change: transform;
   }
 
-  [aria-hidden="false"] .modal__overlay {
+  &[aria-hidden="false"] .modal__overlay {
     animation: mmfadeIn 0.3s cubic-bezier(0, 0, 0.2, 1);
   }
 
-  [aria-hidden="false"] .modal__container {
+  &[aria-hidden="false"] .modal__container {
     animation: mmslideIn 0.3s cubic-bezier(0, 0, 0.2, 1);
   }
 
-  [aria-hidden="true"] .modal__overlay {
+  &[aria-hidden="true"] .modal__overlay {
     animation: mmfadeOut 0.3s cubic-bezier(0, 0, 0.2, 1);
   }
 
-  [aria-hidden="true"] .modal__container {
+  &[aria-hidden="true"] .modal__container {
     animation: mmslideOut 0.3s cubic-bezier(0, 0, 0.2, 1);
   }
 }
