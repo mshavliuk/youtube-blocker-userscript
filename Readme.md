@@ -19,7 +19,7 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] Initial settings [WIP]
 - [x] Compute remain/left time
 - [x] Add linters
-- [ ] Use TypeScript
+- [x] Use TypeScript
 - [ ] Dark theme
 - [ ] Multiple language support
 - [ ] Unit tests
@@ -28,6 +28,7 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] Split to chunks and load lazily
 - [ ] Categories/channels whitelist
 - [ ] Reduce distraction mode
+- [ ] Add Babel
 
 ## 📝 Licence
 

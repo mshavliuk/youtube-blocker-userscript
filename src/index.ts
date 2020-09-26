@@ -1,14 +1,13 @@
-import { Modal } from "./modal";
 import { Clock } from "./clock";
 import { Settings } from "./settings";
-/* global unsafeWindow */
+import { Modal } from "./modal";
 
-(async function (unsafeWindow) {
+(async function (window) {
 	const waitForBody = () => {
 		let counter = 0;
 		return new Promise((resolve) => {
 			const timer = () => {
-				if (document.body) {
+				if (window.document.body) {
 					resolve();
 				} else {
 					counter++;
@@ -24,14 +23,16 @@ import { Settings } from "./settings";
 	const main = () => {
 		console.log("run main");
 
-		const clock = new Clock(unsafeWindow);
+		const clock = new Clock(window);
 
-		unsafeWindow.addEventListener("beforeunload", () => {
+		window.addEventListener("beforeunload", () => {
 			clock.stop();
 		});
 
-		new Settings(unsafeWindow);
-		// return;
+		const settings = new Settings(window);
+		if(!settings.isSettingsSpecified()) {
+			settings.showSettingsDialog();
+		}
 
 		const todayDateString = new Date().toISOString().slice(0, 10);
 
@@ -46,15 +47,13 @@ import { Settings } from "./settings";
 		const timeSinceStartOfBlock = Date.now() - blockTimeStart;
 		const timeUntilEndOfBlock = blockTimeStop - Date.now();
 
-		const destroyThePage = () => {
-			unsafeWindow.document.body.innerHTML = "";
-
-			unsafeWindow.XMLHttpRequest.prototype.send = () => false;
-		};
+		// const destroyThePage = () => {
+		// 	window.document.body.innerHTML = "";
+		// };
 
 		const blockTheSite = () => {
-			destroyThePage();
-			const modal = new Modal();
+			// destroyThePage();
+			const modal = new Modal(window);
 			modal.show(
 				"Let's get a grip!",
 				"You seem to visit this site in restricted time"
@@ -62,17 +61,7 @@ import { Settings } from "./settings";
 		};
 
 		if (timeSinceStartOfBlock > 0 && timeUntilEndOfBlock > 0) {
-			let counter = 0;
-			// FIXME: find more elegant solution 🤔
-			const blockTimer = () => {
-				if (unsafeWindow.document.body) {
-					blockTheSite();
-				} else {
-					counter++;
-					setTimeout(blockTimer, counter * 50);
-				}
-			};
-			setTimeout(blockTimer);
+			blockTheSite();
 		} else if (timeSinceStartOfBlock < 0) {
 			setTimeout(blockTheSite, -timeSinceStartOfBlock);
 		}

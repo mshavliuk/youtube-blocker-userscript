@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const webpack = require("webpack");
 const AddText2BundlePlugin = require("add-text-to-bundle-plugin");
@@ -8,15 +9,23 @@ const glob = require("glob");
 module.exports = {
 	entry: {
 		"bundle.js": glob
-			.sync("./src/index.js")
+			.sync("./src/index.ts")
 			.map((f) => path.resolve(__dirname, f)),
 	},
 	output: {
 		filename: "main.js",
 		path: path.resolve(__dirname, "dist"),
 	},
+	resolve: {
+		extensions: [".js", ".ts"],
+	},
 	module: {
 		rules: [
+			{
+				test: /\.ts?$/,
+				use: "ts-loader",
+				exclude: /node_modules/,
+			},
 			{
 				test: /\.css$/,
 				use: ["style-loader", "css-loader"],
@@ -24,6 +33,9 @@ module.exports = {
 			{
 				test: /\.html$/i,
 				loader: "html-loader",
+				options: {
+					esModule: true,
+				},
 			},
 			{
 				test: /\.s[ac]ss$/i,

@@ -1,6 +1,16 @@
 {
-  "extends": "eslint:recommended",
-  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
   "env": {
     "es6": true,
     "browser": true,
