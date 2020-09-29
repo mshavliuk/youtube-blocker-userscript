@@ -5,6 +5,7 @@ const AddText2BundlePlugin = require("add-text-to-bundle-plugin");
 const fs = require("fs");
 
 const glob = require("glob");
+const PROJECT_PREFIX = "youtube-blocker";
 
 module.exports = {
 	entry: {
@@ -27,10 +28,6 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 			{
-				test: /\.css$/,
-				use: ["style-loader", "css-loader"],
-			},
-			{
 				test: /\.html$/i,
 				loader: "html-loader",
 				options: {
@@ -50,7 +47,7 @@ module.exports = {
 						loader: "pug-html-loader",
 						options: {
 							data: {
-								globalPrefix: "youtube-blocker",
+								globalPrefix: PROJECT_PREFIX,
 							},
 						},
 					},
@@ -64,7 +61,12 @@ module.exports = {
 					// Translates CSS into CommonJS
 					"css-loader",
 					// Compiles Sass to CSS
-					"sass-loader",
+					{
+						loader: "sass-loader",
+						options: {
+							additionalData: "$_globalPrefix: " + PROJECT_PREFIX + ";",
+						},
+					},
 				],
 			},
 		],

@@ -1,5 +1,33 @@
-.youtube-blocker__settings-form {
-  li {
+@import "../global";
+
+$prefix: #{$globalPrefix}__settings;
+
+.#{$prefix}__section-header {
+  margin: 1rem 0 0.5rem;
+}
+
+.#{$prefix}__restricted-days {
+  .#{$prefix}__day-input {
     list-style: none;
+    margin: 0.5rem 0;
+
+    input[type='checkbox'] {
+      margin-right: 1rem;
+    }
   }
+}
+
+.#{$prefix}__restricted-hours {
+  .#{$prefix}__hour-input {
+    display: block;
+    margin: 1rem 0;
+
+    > input {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.#{$prefix}__content-font {
+  font-size: 14px;
 }
