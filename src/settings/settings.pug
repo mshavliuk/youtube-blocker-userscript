@@ -1,36 +1,21 @@
 - var prefix = `${ globalPrefix }__settings`
 
-form#settings-form(class=prefix + "-form")
-    h2 Restricted days
-    ul
-        li
-            input#monday(type='checkbox' name='day')
-            label(for='monday') Monday
-        li
-            input#tuesday(type='checkbox' name='day')
-            label(for='tuesday') Tuesday
-        li
-            input#wednesday(type='checkbox' name='day')
-            label(for='wednesday') Wednesday
-        li
-            input#thursday(type='checkbox' name='day')
-            label(for='thursday')
-            | Thursday
-        li
-            input#friday(type='checkbox' name='day')
-            label(for='friday')
-            | Friday
-        li
-            input#saturday(type='checkbox' name='day')
-            label(for='saturday') Saturday
-        li
-            input#sunday(type='checkbox' name='day')
-            label(for='sunday') Sunday
-    div
-        h2 Restricted hours
-        label
-            input#start-time-input(type='time' name='startTime' required='')
+form#settings-form(class=prefix + "__form")
+    section(class=prefix + '__restricted-days')
+        h2(class=prefix + '__section-header')
+            | Restricted days
+        ul
+          each val in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+              li(class=prefix + '__day-input')
+                label(class=prefix + '__content-font')
+                    input(type='checkbox' name='day')
+                    | #{val}
+    section(class=prefix + '__restricted-hours')
+        h2(class=prefix + '__section-header')
+            | Restricted hours
+        label(class=[prefix + '__hour-input', prefix + '__content-font'])
+            input#start-time-input(type='time' name='startTime' required)
             | Start time
-        label
-            input#end-time-input(type='time' name='endTime' required='')
+        label(class=[prefix + '__hour-input', prefix + '__content-font'])
+            input#end-time-input(type='time' name='endTime' required)
             | End time

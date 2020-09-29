@@ -1,5 +1,5 @@
 import "./modal.scss";
-import modalTemplate from "./modal.html";
+import modalTemplate from "./modal.pug";
 import MicroModal, { MicroModalConfig } from "micromodal";
 import { Inject, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
