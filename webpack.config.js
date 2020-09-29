@@ -38,6 +38,25 @@ module.exports = {
 				},
 			},
 			{
+				test: /\.pug$/,
+				use: [
+					{
+						loader: "html-loader",
+						options: {
+							esModule: true,
+						},
+					},
+					{
+						loader: "pug-html-loader",
+						options: {
+							data: {
+								globalPrefix: "youtube-blocker",
+							},
+						},
+					},
+				],
+			},
+			{
 				test: /\.s[ac]ss$/i,
 				use: [
 					// Creates `style` nodes from JS strings

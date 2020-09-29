@@ -1,4 +1,4 @@
-import html from "./settings.html";
+import template from "./settings.pug";
 import "./settings.scss";
 import { Modal } from "../modal";
 import { Inject, Service } from "typedi";
@@ -22,11 +22,11 @@ export class Settings {
 	}
 
 	public async showSettingsDialog () {
-		const template = document.createElement("template");
-		template.innerHTML = html;
+		const templateElement = document.createElement("template");
+		templateElement.innerHTML = template;
 
 		return new Promise((res) => {
-			this.modal.show("Settings", template);
+			this.modal.show("Settings", templateElement);
 			this.modal.addOnClose((...args) => {
 				console.log(args);
 				console.log('settings were set!');
