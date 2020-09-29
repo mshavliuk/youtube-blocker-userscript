@@ -1,4 +1,4 @@
-# [📺🚫] Youtube blocker userscript
+# 📺🚫 Youtube blocker userscript
 
 // TODO: add proper description
 
@@ -20,15 +20,21 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [x] Compute remain/left time
 - [x] Add linters
 - [x] Use TypeScript
+- [ ] Daily limit
+- [ ] Project description
 - [ ] Dark theme
+- [ ] Autoprefixer
+- [ ] Categories/channels whitelist
+- [ ] "Reduce distraction" mode
+- [ ] Add Babel
+- [ ] CI pipeline (build release)
+
+### Extra features for the following releases
+
 - [ ] Multiple language support
 - [ ] Unit tests
-- [ ] CI pipeline
-- [ ] Autoprefixer
 - [ ] Split to chunks and load lazily
-- [ ] Categories/channels whitelist
-- [ ] Reduce distraction mode
-- [ ] Add Babel
+- [ ] CI pipeline (linters, tests)
 
 ## 📝 Licence
 
