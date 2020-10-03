@@ -1,21 +1,22 @@
-- var prefix = `${ globalPrefix }__settings`
-
-form#settings-form(class=prefix + "__form")
+form(id=prefix)
     section(class=prefix + '__restricted-days')
         h2(class=prefix + '__section-header')
             | Restricted days
-        ul
+        ul(class=prefix + '__days-list')
           each val in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
               li(class=prefix + '__day-input')
                 label(class=prefix + '__content-font')
-                    input(type='checkbox' name='day')
+                    input(type='checkbox' name='day' value=val.toLowerCase())
                     | #{val}
     section(class=prefix + '__restricted-hours')
         h2(class=prefix + '__section-header')
             | Restricted hours
         label(class=[prefix + '__hour-input', prefix + '__content-font'])
-            input#start-time-input(type='time' name='startTime' required)
+            input(type='time' name='startTime' required)
             | Start time
         label(class=[prefix + '__hour-input', prefix + '__content-font'])
-            input#end-time-input(type='time' name='endTime' required)
+            input(type='time' name='endTime' required)
             | End time
+        label(class=[prefix + '__limit-input', prefix + '__content-font'])
+            input#start-time-input(type='number' name='dailyLimit' min='0' max='24' required)
+            | Hours per day (empty or 0 for unlimited)

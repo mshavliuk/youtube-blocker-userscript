@@ -38,18 +38,13 @@ module.exports = {
 				test: /\.pug$/,
 				use: [
 					{
-						loader: "html-loader",
+						loader: path.resolve("cjs-to-es6-loader.js"),
 						options: {
-							esModule: true,
+							presets: ["@babel/preset-env"],
 						},
 					},
 					{
-						loader: "pug-html-loader",
-						options: {
-							data: {
-								globalPrefix: PROJECT_PREFIX,
-							},
-						},
+						loader: "pug-loader",
 					},
 				],
 			},
@@ -78,6 +73,7 @@ module.exports = {
 		}),
 		new webpack.DefinePlugin({
 			STORE_PREFIX: JSON.stringify("[Youtube Blocker]"),
+			HTML_PREFIX: JSON.stringify(PROJECT_PREFIX),
 		}),
 	],
 };

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Clock } from "./clock";
-import { Settings } from "./settings";
+import { Settings, SettingsData } from "./settings";
 import { Modal } from "./modal";
 import { Container } from 'typedi';
 import { WINDOW_TOKEN } from "./window-token";
@@ -26,20 +26,24 @@ import { WINDOW_TOKEN } from "./window-token";
 	await waitForBody();
 
 	const main = async () => {
+		const settings = Container.get(Settings);
+		let settingsData: SettingsData | null = null;
+		if(!settings.isSettingsSpecified()) {
+			settingsData = await settings.showSettingsDialog();
+		}
+		if(settingsData === null) {
+			return;
+		}
+
 		const clock = Container.get(Clock);
 		window.addEventListener("beforeunload", () => {
 			clock.stop();
 		});
 
-		const settings = Container.get(Settings);
-		if(!settings.isSettingsSpecified()) {
-			await settings.showSettingsDialog();
-		}
-
 		const todayDateString = new Date().toISOString().slice(0, 10);
 
-		const scheduleBlockStart = "08:00";
-		const scheduleBlockStop = "23:59";
+		const scheduleBlockStart = settingsData.startTime;
+		const scheduleBlockStop = settingsData.endTime;
 
 		const blockTimeStart = Date.parse(
 			`${todayDateString}T${scheduleBlockStart}`

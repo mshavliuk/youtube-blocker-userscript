@@ -9,6 +9,7 @@ $prefix: #{$globalPrefix}__modal;
 
 .#{$prefix} {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+  font-size: 16px;
 }
 
 .#{$prefix}__overlay {
@@ -44,41 +45,33 @@ $prefix: #{$globalPrefix}__modal;
   margin-top: 0;
   margin-bottom: 0;
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.25em;
   line-height: 1.25;
   color: #00449e;
   box-sizing: border-box;
 }
 
 .#{$prefix}__content {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin: 1em 0;
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.8);
 }
 
 .#{$prefix}__btn {
-  font-size: 0.875rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  font-size: 0.875em;
+  padding: 0.5em 1em;
   background-color: #e6e6e6;
   color: rgba(0, 0, 0, 0.8);
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   border-style: none;
   border-width: 0;
   cursor: pointer;
-  -webkit-appearance: button;
   text-transform: none;
   overflow: visible;
   line-height: 1.15;
   margin: 0;
   will-change: transform;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
   transform: translateZ(0);
   transition: -webkit-transform 0.25s ease-out;
   transition: transform 0.25s ease-out;
@@ -93,6 +86,12 @@ $prefix: #{$globalPrefix}__modal;
 .#{$prefix}__btn-primary {
   background-color: #00449e;
   color: #fff;
+}
+
+.#{$prefix}__footer {
+  > :not(:last-child) {
+    margin-right: 1em;
+  }
 }
 
 /**************************  \

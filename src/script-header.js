@@ -10,5 +10,5 @@
 // @updateURL   https://raw.githubusercontent.com/mshavliuk/uerscripts/master/youtube-blocker.js
 // @grant       none
 // @run-at      document-start
-// @include     /^https?:\/\/(www\.)?youtube.com.*$/
+// @include     /^https?:\/\/(www\.)?testht.ml.*$/
 // ==/UserScript==

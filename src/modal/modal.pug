@@ -1,5 +1,3 @@
-- var prefix = `${ globalPrefix }__modal`
-
 div(id=prefix class=[prefix, prefix + '--slide'] aria-hidden='true')
     div(class=prefix + '__overlay' tabindex='-1', data-micromodal-close='')
         div(class=prefix + '__container' role='dialog', aria-modal='true', aria-labelledby='youtube-blocker__title')
@@ -7,5 +5,5 @@ div(id=prefix class=[prefix, prefix + '--slide'] aria-hidden='true')
                 h2#youtube-blocker__title(class=prefix + '__title')
             main#youtube-blocker__content(class=prefix + '__content')
             footer(class=prefix + '__footer')
-                button(class=[prefix + '__btn', prefix + '__btn-primary']) Ok
-                button(class=prefix + '__btn' data-micromodal-close='', aria-label='Close this dialog window') Close
+                button(class=[prefix + '__btn', prefix + '__btn-primary'] data-micromodal-ok type='submit') Ok
+                button(class=prefix + '__btn' data-micromodal-close='close', aria-label='Close this dialog window') Close
