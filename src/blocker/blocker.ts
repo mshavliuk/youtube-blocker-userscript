@@ -1,5 +1,5 @@
-import { Settings } from "../settings";
 import { Inject, Service } from "typedi";
+import { Settings } from "../settings";
 import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
 import { Clock } from "../clock";
@@ -9,10 +9,13 @@ export type BlockReason = "schedule" | "limit";
 @Service()
 export class Blocker {
   constructor(
+    @Inject(WINDOW_TOKEN) private window: Window,
     private clock: Clock,
     private settings: Settings,
-    private modal: Modal,
-    @Inject(WINDOW_TOKEN) private window: Window) {
+    private modal: Modal
+  ) {}
+
+  public start() {
     const timeToBlock = this.getTimeToBlock();
     if (timeToBlock !== null) {
       setTimeout(() => this.block(timeToBlock.reason), timeToBlock.remain);

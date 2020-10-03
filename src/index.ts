@@ -24,10 +24,13 @@ import { Blocker } from "./blocker";
     clock.stop();
   });
   const settings = Container.get(Settings);
+  // FIXME: Blocker could be instantiated asynchronously, but typedi doesn't support it
+  // see https://github.com/typestack/typedi/pull/126
+
+  const blocker = Container.get(Blocker);
   if (!settings.isSettingsSpecified()) {
     await settings.showSettingsDialog();
   }
-
-  Container.get(Blocker);
+  blocker.start();
 
 })(typeof unsafeWindow !== "undefined" ? unsafeWindow : window);

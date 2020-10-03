@@ -24,6 +24,7 @@ $prefix: #{$globalPrefix}__modal;
   align-items: center;
 }
 
+
 .#{$prefix}__container {
   width: 500px;
   background-color: #fff;
@@ -33,6 +34,10 @@ $prefix: #{$globalPrefix}__modal;
   border-radius: 4px;
   overflow-y: auto;
   box-sizing: border-box;
+
+  [dark] & {
+    background-color: #212121;
+  }
 }
 
 .#{$prefix}__header {
@@ -47,14 +52,22 @@ $prefix: #{$globalPrefix}__modal;
   font-weight: 600;
   font-size: 1.25em;
   line-height: 1.25;
-  color: #00449e;
+  color: #065fd4;
   box-sizing: border-box;
+
+  [dark] & {
+    color: #3ea6ff;
+  }
 }
 
 .#{$prefix}__content {
   margin: 1em 0;
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.8);
+
+  [dark] & {
+    color: #fff;
+  }
 }
 
 .#{$prefix}__btn {
@@ -84,8 +97,18 @@ $prefix: #{$globalPrefix}__modal;
 }
 
 .#{$prefix}__btn-primary {
-  background-color: #00449e;
-  color: #fff;
+  background-color: transparent;
+  color: #065fd4;
+  border: {
+    width: 1px;
+    style: solid;
+    color: #065fd4;
+  }
+
+  [dark] & {
+    color: #3ea6ff;
+    border-color: #3ea6ff;
+  }
 }
 
 .#{$prefix}__footer {
