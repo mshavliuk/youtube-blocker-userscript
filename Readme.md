@@ -16,13 +16,13 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 
 ## ✅ TODO
 
-- [ ] Initial settings [WIP]
+- [x] Initial settings
 - [x] Compute remain/left time
 - [x] Add linters
 - [x] Use TypeScript
-- [ ] Daily limit
+- [x] Daily limit
 - [ ] Project description
-- [ ] Dark theme
+- [x] Dark theme
 - [ ] Autoprefixer
 - [ ] Categories/channels whitelist
 - [ ] "Reduce distraction" mode
