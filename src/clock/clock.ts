@@ -1,18 +1,19 @@
 import { Inject, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
 
+export type ClockData = {
+	spentTime: number;
+}
+
 @Service()
 export class Clock {
+	private readonly storeKey = `${STORE_PREFIX} Clock`
 	private readonly initialSpentTime: number;
 	private readonly createdAt: number;
 
 	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
 		const initialState = this.loadState();
-		if (initialState === null) {
-			this.initialSpentTime = 0;
-		} else {
-			this.initialSpentTime = initialState.spentTime;
-		}
+		this.initialSpentTime = initialState?.spentTime ?? 0;
 		this.createdAt = Date.now();
 	}
 
@@ -35,18 +36,16 @@ export class Clock {
 	}
 
 	private saveState() {
-		const dataToStore = {
+		// TODO: store spent time for each day separately
+		const dataToStore: ClockData = {
 			spentTime: this.getSpentTime(),
 		};
 
-		this.window.localStorage.setItem(
-			`${STORE_PREFIX} State`,
-			JSON.stringify(dataToStore)
-		);
+		this.window.localStorage.setItem(this.storeKey, JSON.stringify(dataToStore));
 	}
 
-	private loadState() {
-		const data = this.window.localStorage.getItem(`${STORE_PREFIX} State`);
+	private loadState(): ClockData | null {
+		const data = this.window.localStorage.getItem(this.storeKey);
 		if (data === null) {
 			return null;
 		}

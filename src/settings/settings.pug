@@ -3,11 +3,11 @@ form(id=prefix)
         h2(class=prefix + '__section-header')
             | Restricted days
         ul(class=prefix + '__days-list')
-          each val in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-              li(class=prefix + '__day-input')
+          each val, index in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+              li(class=prefix + '__days-input')
                 label(class=prefix + '__content-font')
-                    input(type='checkbox' name='day' value=val.toLowerCase())
-                    | #{val}
+                    input(type='checkbox' name='days' value=index)
+                    =val
     section(class=prefix + '__restricted-hours')
         h2(class=prefix + '__section-header')
             | Restricted hours
