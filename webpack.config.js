@@ -5,6 +5,7 @@ const AddText2BundlePlugin = require("add-text-to-bundle-plugin");
 const fs = require("fs");
 
 const glob = require("glob");
+
 const PROJECT_PREFIX = "youtube-blocker";
 
 module.exports = {
@@ -59,7 +60,7 @@ module.exports = {
 					{
 						loader: "sass-loader",
 						options: {
-							additionalData: "$_globalPrefix: " + PROJECT_PREFIX + ";",
+							additionalData: `$_globalPrefix: ${PROJECT_PREFIX};`,
 						},
 					},
 				],

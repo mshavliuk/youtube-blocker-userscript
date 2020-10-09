@@ -17,11 +17,13 @@ export class Clock {
 		this.createdAt = Date.now();
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	pause() {
 		// TODO
 		throw Error("not implemented");
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	resume() {
 		// TODO
 		throw Error("not implemented");

@@ -1,7 +1,7 @@
 import "./modal.scss";
-import template from "./modal.pug";
 import MicroModal from "micromodal";
 import { Inject, Service } from "typedi";
+import template from "./modal.pug";
 import { WINDOW_TOKEN } from "../window-token";
 
 @Service()
@@ -9,6 +9,7 @@ export class Modal {
 	public readonly prefix = `${HTML_PREFIX}__modal`;
 	private readonly templateId: string;
 	private readonly modalElement: HTMLElement;
+
 	private titleElement: HTMLHeadingElement;
 	private contentElement: HTMLDivElement;
 	private okButtonElement: HTMLButtonElement;
@@ -45,7 +46,17 @@ export class Modal {
 		MicroModal.init();
 	}
 
-	public show(title: string, content: string | HTMLElement): Promise<boolean> {
+	public show({
+		title,
+		content,
+		cancelButton,
+		okButton,
+	}: {
+		title: string;
+		content: string | HTMLElement;
+		cancelButton?: string | null;
+		okButton?: string | null;
+	}): Promise<boolean> {
 		this.titleElement.innerText = title;
 		if (typeof content === "string") {
 			this.contentElement.innerText = content;

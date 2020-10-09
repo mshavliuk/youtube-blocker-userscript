@@ -7,9 +7,15 @@ $prefix: #{$globalPrefix}__modal;
 \  **************************/
 
 
-.#{$prefix} {
+##{$prefix} {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
   font-size: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
 }
 
 .#{$prefix}__overlay {

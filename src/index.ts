@@ -1,12 +1,12 @@
 import "reflect-metadata";
 
+import { Container } from "typedi";
 import { Clock } from "./clock";
 import { Settings } from "./settings";
-import { Container } from "typedi";
 import { WINDOW_TOKEN } from "./window-token";
 import { Blocker } from "./blocker";
 
-(async function (window) {
+(async function main(window) {
 	await (() =>
 		new Promise((resolve) => {
 			const timer = (counter = 0) => {

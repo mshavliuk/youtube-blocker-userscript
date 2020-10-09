@@ -23,33 +23,24 @@ export class Blocker {
 	}
 
 	private getTimeToBlock(): { remain: number; reason: BlockReason } | null {
-		const settingsData = this.settings.getSettings();
-
-		if (settingsData === null) {
-			return null;
-		}
-
 		let timeToBlock: { remain: number; reason: BlockReason } | null = null;
 
-		if (settingsData.dailyLimit) {
+		const dailyLimit = this.settings.getSetting("dailyLimit");
+		if (dailyLimit !== null) {
 			timeToBlock = {
 				remain:
-					Math.max(
-						0,
-						settingsData.dailyLimit * 3600 - this.clock.getSpentTime()
-					) * 1000,
+					Math.max(0, dailyLimit * 3600 - this.clock.getSpentTime()) * 1000,
 				reason: "limit",
 			};
 		}
 
-		const todayDateString = new Date().toISOString().slice(0, 10);
-
-		const scheduleBlockStart = settingsData.startTime;
-		const scheduleBlockEnd = settingsData.endTime;
-
 		const dayOfTheWeek = (new Date().getDay() + 6) % 7; // mon..sun = 0..6
 
-		if (settingsData.days.includes(dayOfTheWeek)) {
+		if (this.settings.getSetting("days").includes(dayOfTheWeek)) {
+			const todayDateString = new Date().toISOString().slice(0, 10);
+
+			const scheduleBlockStart = this.settings.getSetting("startTime");
+			const scheduleBlockEnd = this.settings.getSetting("endTime");
 			// TODO: time to unlock
 			// TODO: take the following day into account
 
@@ -64,15 +55,15 @@ export class Blocker {
 			const timeToScheduleUnlock = blockTimeStop - Date.now();
 			if (timeToScheduleBlock < 0 && timeToScheduleUnlock > 0) {
 				return { remain: 0, reason: "schedule" };
-			} else if (timeToScheduleBlock > 0) {
+			}
+			if (timeToScheduleBlock > 0) {
 				if (!timeToBlock || timeToScheduleBlock < timeToBlock?.remain) {
 					return {
 						reason: "schedule",
 						remain: timeToScheduleBlock,
 					};
-				} else {
-					return timeToBlock;
 				}
+				return timeToBlock;
 			}
 		}
 
@@ -80,11 +71,25 @@ export class Blocker {
 	}
 
 	private block(reason: BlockReason) {
-		this.window.document.body.innerHTML = "";
 		this.modal.attach();
-		this.modal.show(
-			"Let's get a grip!",
-			`You seem to visit this site in restricted time. Reason: ${reason}`
-		);
+		// TODO: add button for lunch time
+		// TODO: store the lunch taken
+		if (this.isBreakAllowed()) {
+			this.modal.show({
+				title: "Let's get a grip!",
+				content:
+					"You seem to visit this site in restricted time, but you still can take a break",
+			});
+		} else {
+			this.window.document.body.innerHTML = "";
+			this.modal.show({
+				title: "Let's get a grip!",
+				content: `You seem to visit this site in restricted time. Reason: ${reason}`,
+			});
+		}
+	}
+
+	private isBreakAllowed(): boolean {
+		return this.settings.getSetting("breakAllowed");
 	}
 }
