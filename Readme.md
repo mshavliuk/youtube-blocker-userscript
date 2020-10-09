@@ -23,9 +23,8 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [x] Daily limit
 - [ ] Project description
 - [x] Dark theme
+- [ ] Lunch time pause
 - [ ] Autoprefixer
-- [ ] Categories/channels whitelist
-- [ ] "Reduce distraction" mode
 - [ ] Add Babel
 - [ ] CI pipeline (build release)
 
@@ -35,6 +34,8 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] Unit tests
 - [ ] Split to chunks and load lazily
 - [ ] CI pipeline (linters, tests)
+- [ ] Categories/channels whitelist
+- [ ] "Reduce distraction" mode
 
 ## 📝 Licence
 
