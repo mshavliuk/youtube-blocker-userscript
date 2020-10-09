@@ -4,19 +4,25 @@ form(id=prefix)
             | Restricted days
         ul(class=prefix + '__days-list')
           each val, index in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-              li(class=prefix + '__days-input')
-                label(class=prefix + '__content-font')
+              li
+                label
                     input(type='checkbox' name='days' value=index)
                     =val
     section(class=prefix + '__restricted-hours')
         h2(class=prefix + '__section-header')
             | Restricted hours
-        label(class=[prefix + '__hour-input', prefix + '__content-font'])
+        label(class=prefix + '__field')
             input(type='time' name='startTime' required)
             | Start time
-        label(class=[prefix + '__hour-input', prefix + '__content-font'])
+        label(class=prefix + '__field')
             input(type='time' name='endTime' required)
             | End time
-        label(class=[prefix + '__limit-input', prefix + '__content-font'])
-            input#start-time-input(type='number' name='dailyLimit' min='0' max='24' required)
+        label(class=prefix + '__field')
+            input(type='number' name='dailyLimit' min='0' max='24' required)
             | Hours per day (empty or 0 for unlimited)
+        label(class=prefix + '__field')
+            input(type='checkbox' name='breakAllowed')
+            | Allow to make a break during restricted hours
+        label(id=prefix + '__break-field' class=prefix + '__field' style="display: none;")
+            input(type='number' name='breakDuration' min='0' required)
+            | Break duration

@@ -10,32 +10,26 @@ $prefix: #{$globalPrefix}__settings;
   .#{$prefix}__days-list {
     margin: 0 0 1em;
     padding: 0;
-  }
 
-  .#{$prefix}__days-input {
-    list-style: none;
-    margin: 0.5em 0;
-
-    input[type='checkbox'] {
-      margin-right: 1em;
+    li {
+      list-style: none;
+      margin: 0.5em 0;
     }
+  }
+}
+
+input {
+  margin-right: 1em;
+
+  &:not([type='checkbox']) {
+    width: 8em;
+    box-sizing: border-box;
   }
 }
 
 .#{$prefix}__restricted-hours {
-  .#{$prefix}__hour-input,
-  .#{$prefix}__limit-input {
+  .#{$prefix}__field {
     display: block;
     margin: 1em 0;
-
-    > input {
-      margin-right: 1em;
-      width: 8em;
-      box-sizing: border-box;
-    }
   }
-}
-
-.#{$prefix}__content-font {
-  font-size: 14px;
 }
