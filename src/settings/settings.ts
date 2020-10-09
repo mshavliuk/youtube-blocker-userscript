@@ -21,21 +21,32 @@ export class Settings {
 		private modal: Modal
 	) {}
 
+	private cachedSettings: SettingsData | null = null;
+
 	public isSettingsSpecified() {
 		return !!this.getSettings();
 	}
 
 	public getSettings(): SettingsData | null {
-		const settings = this.window.localStorage.getItem(this.storeKey);
-		if (!settings) {
-			return null;
-		} else {
-			return JSON.parse(settings);
+		if (this.cachedSettings) {
+			return this.cachedSettings;
 		}
+
+		const settingsString = this.window.localStorage.getItem(this.storeKey);
+		if (!settingsString) {
+			return null;
+		}
+		this.cachedSettings = JSON.parse(settingsString);
+		return this.cachedSettings;
+	}
+
+	public getSetting<K extends keyof SettingsData>(key: K): SettingsData[K] {
+		return { ...this.defaults, ...this.getSettings() }[key];
 	}
 
 	public setSettings(settings: SettingsData) {
 		this.window.localStorage.setItem(this.storeKey, JSON.stringify(settings));
+		this.cachedSettings = settings;
 	}
 
 	public async showSettingsDialog(): Promise<SettingsData | null> {
