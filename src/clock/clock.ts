@@ -3,11 +3,11 @@ import { WINDOW_TOKEN } from "../window-token";
 
 export type ClockData = {
 	spentTime: number;
-}
+};
 
 @Service()
 export class Clock {
-	private readonly storeKey = `${STORE_PREFIX} Clock`
+	private readonly storeKey = `${STORE_PREFIX} Clock`;
 	private readonly initialSpentTime: number;
 	private readonly createdAt: number;
 
@@ -19,12 +19,12 @@ export class Clock {
 
 	pause() {
 		// TODO
-		throw Error('not implemented');
+		throw Error("not implemented");
 	}
 
 	resume() {
 		// TODO
-		throw Error('not implemented');
+		throw Error("not implemented");
 	}
 
 	public stop() {
@@ -41,7 +41,10 @@ export class Clock {
 			spentTime: this.getSpentTime(),
 		};
 
-		this.window.localStorage.setItem(this.storeKey, JSON.stringify(dataToStore));
+		this.window.localStorage.setItem(
+			this.storeKey,
+			JSON.stringify(dataToStore)
+		);
 	}
 
 	private loadState(): ClockData | null {

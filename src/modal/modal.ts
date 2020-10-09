@@ -6,7 +6,7 @@ import { WINDOW_TOKEN } from "../window-token";
 
 @Service()
 export class Modal {
-	public readonly prefix = `${ HTML_PREFIX }__modal`;
+	public readonly prefix = `${HTML_PREFIX}__modal`;
 	private readonly templateId: string;
 	private readonly modalElement: HTMLElement;
 	private titleElement: HTMLHeadingElement;
@@ -18,32 +18,36 @@ export class Modal {
 		const wrapper = window.document.createElement("div");
 		wrapper.innerHTML = template(this);
 		const modalElement = wrapper.firstChild;
-		if(!(modalElement instanceof HTMLElement)) {
-			throw new Error('Template is not instanceof HTMLElement')
+		if (!(modalElement instanceof HTMLElement)) {
+			throw new Error("Template is not instanceof HTMLElement");
 		}
 		this.modalElement = modalElement;
-		this.templateId = this.modalElement .id;
-		this.titleElement = this.modalElement .querySelector<HTMLHeadingElement>(`#${this.prefix}__title`)!;
-		this.contentElement = this.modalElement .querySelector<HTMLDivElement>(
+		this.templateId = this.modalElement.id;
+		this.titleElement = this.modalElement.querySelector<HTMLHeadingElement>(
+			`#${this.prefix}__title`
+		)!;
+		this.contentElement = this.modalElement.querySelector<HTMLDivElement>(
 			`#${this.prefix}__content`
 		)!;
-		this.okButtonElement = this.modalElement .querySelector<HTMLButtonElement>('[data-micromodal-ok]')!
-		this.okButtonElement.addEventListener('click', () => {
-			if(this.okCallback) {
+		this.okButtonElement = this.modalElement.querySelector<HTMLButtonElement>(
+			"[data-micromodal-ok]"
+		)!;
+		this.okButtonElement.addEventListener("click", () => {
+			if (this.okCallback) {
 				this.okCallback();
 			}
-		})
+		});
 		this.attach();
 	}
 
 	public attach() {
-		this.window.document.body.appendChild(this.modalElement );
+		this.window.document.body.appendChild(this.modalElement);
 		MicroModal.init();
 	}
 
 	public show(title: string, content: string | HTMLElement): Promise<boolean> {
 		this.titleElement.innerText = title;
-		if (typeof content === 'string') {
+		if (typeof content === "string") {
 			this.contentElement.innerText = content;
 		} else if (content instanceof HTMLElement) {
 			this.contentElement.appendChild(content);
@@ -52,10 +56,10 @@ export class Modal {
 			MicroModal.show(this.templateId, {
 				onClose: () => {
 					this.setOkCallback(null);
-					this.contentElement.innerHTML = '';
-					this.titleElement.innerText = '';
+					this.contentElement.innerHTML = "";
+					this.titleElement.innerText = "";
 					resolve(false);
-				}
+				},
 			});
 
 			this.setOkCallback(() => {
@@ -63,7 +67,7 @@ export class Modal {
 				resolve(true);
 				MicroModal.close(this.templateId);
 			});
-		})
+		});
 	}
 
 	private setOkCallback(fn: (() => void) | null) {

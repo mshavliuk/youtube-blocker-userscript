@@ -13,10 +13,13 @@ export type SettingsData = {
 
 @Service()
 export class Settings {
-	public readonly prefix = `${ HTML_PREFIX }__settings`;
-	private readonly storeKey = `${STORE_PREFIX} Settings`
+	public readonly prefix = `${HTML_PREFIX}__settings`;
+	private readonly storeKey = `${STORE_PREFIX} Settings`;
 
-	constructor(@Inject(WINDOW_TOKEN) private window: Window, private modal: Modal) {}
+	constructor(
+		@Inject(WINDOW_TOKEN) private window: Window,
+		private modal: Modal
+	) {}
 
 	public isSettingsSpecified() {
 		return !!this.getSettings();
@@ -24,7 +27,7 @@ export class Settings {
 
 	public getSettings(): SettingsData | null {
 		const settings = this.window.localStorage.getItem(this.storeKey);
-		if(!settings) {
+		if (!settings) {
 			return null;
 		} else {
 			return JSON.parse(settings);
@@ -35,7 +38,7 @@ export class Settings {
 		this.window.localStorage.setItem(this.storeKey, JSON.stringify(settings));
 	}
 
-	public async showSettingsDialog (): Promise<SettingsData | null> {
+	public async showSettingsDialog(): Promise<SettingsData | null> {
 		const templateElement = document.createElement("div");
 		templateElement.innerHTML = template(this);
 
@@ -43,7 +46,7 @@ export class Settings {
 			this.modal.show("Settings", templateElement).then(
 				// TODO: add form validation
 				(result) => {
-					if(!result) {
+					if (!result) {
 						resolve(null);
 						return;
 					}
@@ -52,20 +55,30 @@ export class Settings {
 					const formData = new FormData(form as HTMLFormElement);
 					const strData = Array.from(formData.entries())
 						.filter((v) => !!v)
-						.reduce((res: { [k: string]: string | string[] }, [key, value]) =>
-								({ ...res, [key]: res[key] ? [String(value)].concat(res[key]) : String(value) }),
-							{}) as { [k in keyof SettingsData]?: SettingsData[k] extends any[] ? string[] : string };
+						.reduce(
+							(res: { [k: string]: string | string[] }, [key, value]) => ({
+								...res,
+								[key]: res[key]
+									? [String(value)].concat(res[key])
+									: String(value),
+							}),
+							{}
+						) as {
+						[k in keyof SettingsData]?: SettingsData[k] extends Array<unknown>
+							? string[]
+							: string;
+					};
 					const data: SettingsData = {
 						endTime: null,
 						startTime: null,
 						...strData,
 						dailyLimit: Number(strData.dailyLimit) || null,
-						days: Array.from(strData.days ?? []).map(Number)
-					}
+						days: Array.from(strData.days ?? []).map(Number),
+					};
 					this.setSettings(data);
 					resolve(data);
 				}
 			);
-		})
+		});
 	}
 }
