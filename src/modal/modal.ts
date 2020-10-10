@@ -4,6 +4,13 @@ import { Inject, Service } from "typedi";
 import template from "./modal.pug";
 import { WINDOW_TOKEN } from "../window-token";
 
+export interface ShowModalOptions {
+	title: string;
+	content: string | HTMLElement;
+	closeButton?: string | null;
+	okButton?: string | null;
+}
+
 @Service()
 export class Modal {
 	public readonly prefix = `${HTML_PREFIX}__modal`;
@@ -13,6 +20,7 @@ export class Modal {
 	private titleElement: HTMLHeadingElement;
 	private contentElement: HTMLDivElement;
 	private okButtonElement: HTMLButtonElement;
+	private closeButtonElement: HTMLButtonElement;
 	private okCallback: (() => void) | null = null;
 
 	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
@@ -33,6 +41,9 @@ export class Modal {
 		this.okButtonElement = this.modalElement.querySelector<HTMLButtonElement>(
 			"[data-micromodal-ok]"
 		)!;
+		this.closeButtonElement = this.modalElement.querySelector<
+			HTMLButtonElement
+		>("[data-micromodal-close]")!;
 		this.okButtonElement.addEventListener("click", () => {
 			if (this.okCallback) {
 				this.okCallback();
@@ -46,29 +57,17 @@ export class Modal {
 		MicroModal.init();
 	}
 
-	public show({
-		title,
-		content,
-		cancelButton,
-		okButton,
-	}: {
-		title: string;
-		content: string | HTMLElement;
-		cancelButton?: string | null;
-		okButton?: string | null;
-	}): Promise<boolean> {
-		this.titleElement.innerText = title;
-		if (typeof content === "string") {
-			this.contentElement.innerText = content;
-		} else if (content instanceof HTMLElement) {
-			this.contentElement.appendChild(content);
-		}
+	public show(options: ShowModalOptions): Promise<boolean> {
+		this.fillModal(options);
+
 		return new Promise((resolve) => {
 			MicroModal.show(this.templateId, {
 				onClose: () => {
 					this.setOkCallback(null);
 					this.contentElement.innerHTML = "";
 					this.titleElement.innerText = "";
+					this.okButtonElement.innerText = "";
+					this.closeButtonElement.innerText = "";
 					resolve(false);
 				},
 			});
@@ -79,6 +78,22 @@ export class Modal {
 				MicroModal.close(this.templateId);
 			});
 		});
+	}
+
+	private fillModal({
+		title,
+		content,
+		closeButton,
+		okButton,
+	}: ShowModalOptions) {
+		this.titleElement.innerText = title;
+		this.okButtonElement.innerText = okButton ?? "Ok";
+		this.closeButtonElement.innerText = closeButton ?? "Close";
+		if (typeof content === "string") {
+			this.contentElement.innerText = content;
+		} else if (content instanceof HTMLElement) {
+			this.contentElement.appendChild(content);
+		}
 	}
 
 	private setOkCallback(fn: (() => void) | null) {
