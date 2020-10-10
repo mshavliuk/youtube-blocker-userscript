@@ -6,11 +6,15 @@ import { Settings } from "./settings";
 import { WINDOW_TOKEN } from "./window-token";
 import { Blocker } from "./blocker";
 
+function isReady(window: Window): boolean {
+	return !!(window.document.body && window.localStorage);
+}
+
 (async function main(window) {
 	await (() =>
 		new Promise((resolve) => {
 			const timer = (counter = 0) => {
-				if (window.document.body) {
+				if (isReady(window)) {
 					resolve();
 				} else {
 					setTimeout(() => timer(counter), ++counter * 50);
