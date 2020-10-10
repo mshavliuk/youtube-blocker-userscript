@@ -73,7 +73,7 @@ export class Blocker {
 	}
 
 	private handleBlock(reason: BlockReason) {
-		// clock.pause()
+		this.clock.stop();
 		const breakTimeLeft = Math.max(
 			0,
 			(this.settings.getSetting("breakDuration") ?? 0) * 60 * 1000 -

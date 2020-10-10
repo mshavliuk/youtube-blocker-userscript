@@ -25,6 +25,7 @@ function isReady(window: Window): boolean {
 
 	Container.set(WINDOW_TOKEN, window);
 	const clock = Container.get(Clock);
+	clock.start();
 	window.addEventListener("beforeunload", () => {
 		clock.stop();
 	});

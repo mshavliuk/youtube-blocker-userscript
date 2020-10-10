@@ -18,8 +18,8 @@ form(id=prefix)
             input(type='time' name='endTime' required)
             | End time
         label(class=prefix + '__field')
-            input(type='number' name='dailyLimit' min='0' max='24' required)
-            | Allowed hours per day (empty or 0 for unlimited)
+            input(type='number' name='dailyLimit' min='0' max='24')
+            | Allowed hours per day
         label(class=prefix + '__field')
             input(type='checkbox' name='breakAllowed')
             | Allow to make a break during restricted hours

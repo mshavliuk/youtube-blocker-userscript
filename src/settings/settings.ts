@@ -120,7 +120,7 @@ export class Settings {
 			...strData,
 			breakAllowed: strData.breakAllowed === "on",
 			breakDuration: Number(strData.breakDuration) || null,
-			dailyLimit: Number(strData.dailyLimit) || null,
+			dailyLimit: strData.dailyLimit ? Number(strData.dailyLimit) : null,
 			days: Array.from(strData.days ?? []).map(Number),
 		};
 		this.setSettings(data);
