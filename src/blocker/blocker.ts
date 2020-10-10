@@ -4,7 +4,7 @@ import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
 import { Clock } from "../clock";
 
-export type BlockReason = "schedule" | "limit";
+export type BlockReason = "schedule" | "limit" | "breakEnd";
 
 @Service()
 export class Blocker {
@@ -16,20 +16,22 @@ export class Blocker {
 	) {}
 
 	public start() {
-		const timeToBlock = this.getTimeToBlock();
+		const timeToBlock = this.getBlockData();
 		if (timeToBlock !== null) {
-			setTimeout(() => this.block(timeToBlock.reason), timeToBlock.remain);
+			setTimeout(
+				() => this.handleBlock(timeToBlock.reason),
+				timeToBlock.remain
+			);
 		}
 	}
 
-	private getTimeToBlock(): { remain: number; reason: BlockReason } | null {
+	private getBlockData(): { remain: number; reason: BlockReason } | null {
 		let timeToBlock: { remain: number; reason: BlockReason } | null = null;
 
 		const dailyLimit = this.settings.getSetting("dailyLimit");
 		if (dailyLimit !== null) {
 			timeToBlock = {
-				remain:
-					Math.max(0, dailyLimit * 3600 - this.clock.getSpentTime()) * 1000,
+				remain: Math.max(0, dailyLimit * 3600 - this.clock.getTimeSpent()),
 				reason: "limit",
 			};
 		}
@@ -70,26 +72,59 @@ export class Blocker {
 		return timeToBlock;
 	}
 
-	private block(reason: BlockReason) {
-		this.modal.attach();
-		// TODO: add button for lunch time
-		// TODO: store the lunch taken
-		if (this.isBreakAllowed()) {
-			this.modal.show({
-				title: "Let's get a grip!",
-				content:
-					"You seem to visit this site in restricted time, but you still can take a break",
-			});
+	private handleBlock(reason: BlockReason) {
+		// clock.pause()
+		const breakTimeLeft = Math.max(
+			0,
+			(this.settings.getSetting("breakDuration") ?? 0) * 60 * 1000 -
+				this.clock.getBreakTimeSpent()
+		);
+
+		if (
+			reason === "schedule" &&
+			this.settings.getSetting("breakAllowed") &&
+			breakTimeLeft > 0
+		) {
+			this.modal
+				.show({
+					title: "Block",
+					content: `You seem to visit the ${
+						this.window.location.hostname
+					} in restricted time, but you can take a break (${(
+						breakTimeLeft /
+						60 /
+						1000
+					).toFixed(1)} minutes have left)`,
+					okButton: "Take a break",
+					closeButton: "Block",
+				})
+				.then((ok) => {
+					if (ok) {
+						this.clock.startBreakPeriod();
+						setTimeout(() => {
+							const blockData = this.getBlockData();
+							if (blockData) {
+								this.handleBlock("breakEnd");
+							}
+						}, breakTimeLeft);
+					} else {
+						this.block();
+					}
+				});
+			return;
 		} else {
-			this.window.document.body.innerHTML = "";
+			this.block();
+			this.modal.attach();
 			this.modal.show({
-				title: "Let's get a grip!",
-				content: `You seem to visit this site in restricted time. Reason: ${reason}`,
+				title: "Block",
+				content: `The ${this.window.location.hostname} was blocked. Reason: ${reason}`,
 			});
+			return;
 		}
 	}
 
-	private isBreakAllowed(): boolean {
-		return this.settings.getSetting("breakAllowed");
+	private block() {
+		this.clock.stop();
+		this.window.document.body.innerHTML = "";
 	}
 }

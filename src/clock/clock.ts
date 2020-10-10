@@ -2,19 +2,23 @@ import { Inject, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
 
 export type ClockData = {
-	spentTime: number;
+	timeSpent: number;
+	breakTimeSpent: number;
 };
 
 @Service()
 export class Clock {
 	private readonly storeKey = `${STORE_PREFIX} Clock`;
-	private readonly initialSpentTime: number;
-	private readonly createdAt: number;
+	private readonly createdAt: Date;
+	private readonly initialStoreData: Readonly<ClockData>;
+	private breakStartedAt: Date | null = null;
 
 	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
-		const initialState = this.loadState();
-		this.initialSpentTime = initialState?.spentTime ?? 0;
-		this.createdAt = Date.now();
+		this.initialStoreData = this.loadState() ?? {
+			breakTimeSpent: 0,
+			timeSpent: 0,
+		};
+		this.createdAt = new Date();
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -33,14 +37,33 @@ export class Clock {
 		this.saveState();
 	}
 
-	public getSpentTime() {
-		return this.initialSpentTime + (Date.now() - this.createdAt) / 1000;
+	public startBreakPeriod() {
+		this.breakStartedAt = new Date();
 	}
+
+	public getTimeSpent() {
+		return (
+			this.initialStoreData.timeSpent + (Date.now() - this.createdAt.getTime())
+		);
+	}
+
+	public getBreakTimeSpent(): number {
+		if (this.breakStartedAt) {
+			return (
+				this.initialStoreData.breakTimeSpent +
+				(Date.now() - this.breakStartedAt.getTime())
+			);
+		}
+		return this.initialStoreData.breakTimeSpent;
+	}
+
+	// TODO: store break time is spent
 
 	private saveState() {
 		// TODO: store spent time for each day separately
 		const dataToStore: ClockData = {
-			spentTime: this.getSpentTime(),
+			timeSpent: this.getTimeSpent(),
+			breakTimeSpent: this.getBreakTimeSpent(),
 		};
 
 		this.window.localStorage.setItem(

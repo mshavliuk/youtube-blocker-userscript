@@ -19,10 +19,10 @@ form(id=prefix)
             | End time
         label(class=prefix + '__field')
             input(type='number' name='dailyLimit' min='0' max='24' required)
-            | Hours per day (empty or 0 for unlimited)
+            | Allowed hours per day (empty or 0 for unlimited)
         label(class=prefix + '__field')
             input(type='checkbox' name='breakAllowed')
             | Allow to make a break during restricted hours
         label(id=prefix + '__break-field' class=prefix + '__field' style="display: none;")
             input(type='number' name='breakDuration' min='0' required)
-            | Break duration
+            | Break duration (minutes)
