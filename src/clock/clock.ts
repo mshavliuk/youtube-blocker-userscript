@@ -6,78 +6,121 @@ export type ClockData = {
 	breakTimeSpent: number;
 };
 
+export type ClockStore = {
+	[date: string]: ClockData;
+};
+
 @Service()
 export class Clock {
-	private readonly storeKey = `${STORE_PREFIX} Clock`;
-	private readonly createdAt: Date;
-	private readonly initialStoreData: Readonly<ClockData>;
+	private static readonly STORE_KEY = `${STORE_PREFIX} Clock`;
+
+	private clockStartedAt: Date | null = null;
 	private breakStartedAt: Date | null = null;
 
-	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
-		this.initialStoreData = this.loadState() ?? {
-			breakTimeSpent: 0,
-			timeSpent: 0,
-		};
-		this.createdAt = new Date();
-	}
+	constructor(@Inject(WINDOW_TOKEN) private window: Window) {}
 
-	// eslint-disable-next-line class-methods-use-this
-	pause() {
-		// TODO
-		throw Error("not implemented");
-	}
-
-	// eslint-disable-next-line class-methods-use-this
-	resume() {
-		// TODO
-		throw Error("not implemented");
+	public start() {
+		this.clockStartedAt = this.clockStartedAt ?? new Date();
 	}
 
 	public stop() {
+		if (this.clockStartedAt === null) {
+			return;
+		}
+
 		this.saveState();
+		this.clockStartedAt = null;
 	}
 
 	public startBreakPeriod() {
-		this.breakStartedAt = new Date();
+		this.breakStartedAt = this.breakStartedAt ?? new Date();
+		this.start();
 	}
 
-	public getTimeSpent() {
+	public getTimeSpent(
+		from: Date = new Date(`${this.getDateString()}T00:00:00Z`),
+		until: Date = new Date()
+	): number {
+		if (!this.clockStartedAt) {
+			return this.getDateData(this.getDateString(from)).timeSpent;
+		}
+
 		return (
-			this.initialStoreData.timeSpent + (Date.now() - this.createdAt.getTime())
+			this.getDateData(this.getDateString(from)).timeSpent +
+			this.computeSpentTime(this.clockStartedAt, from, until)
 		);
 	}
 
-	public getBreakTimeSpent(): number {
-		if (this.breakStartedAt) {
-			return (
-				this.initialStoreData.breakTimeSpent +
-				(Date.now() - this.breakStartedAt.getTime())
-			);
+	public getBreakTimeSpent(
+		from: Date = new Date(`${this.getDateString()}T00:00:00Z`),
+		until: Date = new Date()
+	): number {
+		if (!this.breakStartedAt) {
+			return this.getDateData(this.getDateString(from)).breakTimeSpent;
 		}
-		return this.initialStoreData.breakTimeSpent;
+
+		return (
+			this.getDateData(this.getDateString(from)).breakTimeSpent +
+			this.computeSpentTime(this.breakStartedAt, from, until)
+		);
 	}
 
-	// TODO: store break time is spent
+	private computeSpentTime(
+		start: Date,
+		from: Date = new Date(`${this.getDateString()}T00:00:00Z`),
+		until: Date = new Date()
+	): number {
+		const timeStart = Math.max(start.getTime(), from.getTime());
+
+		return Math.max(0, until.getTime() - timeStart);
+	}
+
+	private getDateString(date: Date = new Date()): string {
+		return date.toISOString().slice(0, 10);
+	}
 
 	private saveState() {
-		// TODO: store spent time for each day separately
-		const dataToStore: ClockData = {
+		const storeData = this.loadState() ?? {};
+
+		if (
+			this.clockStartedAt &&
+			this.clockStartedAt.getDate() !== new Date().getDate()
+		) {
+			const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			const yesterdayDate = this.getDateString(yesterday);
+			const yesterdayStartDate = new Date(`${yesterdayDate}T00:00:00Z`);
+			const todayStartDate = new Date(`${this.getDateString()}T00:00:00Z`);
+			storeData[yesterdayDate] = {
+				timeSpent: this.getTimeSpent(yesterdayStartDate, todayStartDate),
+				breakTimeSpent: this.getBreakTimeSpent(
+					yesterdayStartDate,
+					todayStartDate
+				),
+			};
+		}
+
+		const dateKey = this.getDateString();
+		storeData[dateKey] = {
 			timeSpent: this.getTimeSpent(),
 			breakTimeSpent: this.getBreakTimeSpent(),
 		};
 
 		this.window.localStorage.setItem(
-			this.storeKey,
-			JSON.stringify(dataToStore)
+			Clock.STORE_KEY,
+			JSON.stringify(storeData)
 		);
 	}
 
-	private loadState(): ClockData | null {
-		const data = this.window.localStorage.getItem(this.storeKey);
-		if (data === null) {
+	private loadState(): ClockStore | null {
+		const strData = this.window.localStorage.getItem(Clock.STORE_KEY);
+		if (strData === null) {
 			return null;
 		}
+		return JSON.parse(strData);
+	}
 
-		return JSON.parse(data);
+	private getDateData(dateKey: string): ClockData {
+		const data = this.loadState() ?? {};
+		return data[dateKey] ?? { breakTimeSpent: 0, timeSpent: 0 };
 	}
 }
