@@ -23,7 +23,7 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [x] Daily limit
 - [ ] Project description
 - [x] Dark theme
-- [ ] Lunch time pause
+- [x] Lunch time pause
 - [ ] Autoprefixer
 - [ ] Add Babel
 - [ ] CI pipeline (build release)
