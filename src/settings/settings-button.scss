@@ -1,0 +1,7 @@
+@import "../global";
+
+$prefix: #{$globalPrefix}__settings-button;
+
+##{$prefix} a {
+  user-select: none;
+}

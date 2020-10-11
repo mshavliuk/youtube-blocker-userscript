@@ -1,6 +1,7 @@
 import modalTemplate from "./settings-modal.pug";
 import buttonTemplate from "./settings-button.pug";
-import "./settings.scss";
+import "./settings-modal.scss";
+import "./settings-button.scss";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
@@ -103,12 +104,31 @@ export class Settings {
 	}
 
 	private attachHeadButton() {
-		this.waitForSidebar().then((buttonContainer) => {
+		const attachFn = (buttonContainer: HTMLDivElement) => {
 			const buttonRenderWrapper = this.window.document.createElement("div");
 			buttonRenderWrapper.innerHTML = buttonTemplate(this);
 			const buttonElement = buttonRenderWrapper.firstElementChild!;
 			buttonContainer.appendChild(buttonElement);
 			buttonElement.addEventListener("click", () => this.showSettingsDialog());
+		};
+
+		// There are some re-rendering after sidebar initialization so the button can be removed
+		const reattachFn = (buttonContainer: HTMLDivElement, counter = 0) => {
+			if (!buttonContainer.querySelector(`#${this.prefix}-button`)) {
+				attachFn(buttonContainer);
+			}
+			if (counter < 5) {
+				counter += 1;
+				setTimeout(
+					() => reattachFn(buttonContainer, counter + 1),
+					counter * 1000
+				);
+			}
+		};
+
+		this.waitForSidebar().then((buttonContainer) => {
+			attachFn(buttonContainer);
+			reattachFn(buttonContainer);
 		});
 	}
 
