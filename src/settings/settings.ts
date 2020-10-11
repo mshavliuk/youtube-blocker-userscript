@@ -1,4 +1,5 @@
-import template from "./settings.pug";
+import modalTemplate from "./settings-modal.pug";
+import buttonTemplate from "./settings-button.pug";
 import "./settings.scss";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
@@ -32,7 +33,9 @@ export class Settings {
 		container: Container,
 		private window = Container.get(WINDOW_TOKEN),
 		private modal = Container.get(Modal)
-	) {}
+	) {
+		this.attachHeadButton();
+	}
 
 	public isSettingsSpecified() {
 		return !!this.getSettings();
@@ -61,8 +64,12 @@ export class Settings {
 	}
 
 	public async showSettingsDialog(): Promise<SettingsData | null> {
+		const initialSettings = this.getSettings() ?? this.defaults;
 		const templateElement = document.createElement("div");
-		templateElement.innerHTML = template(this);
+		templateElement.innerHTML = modalTemplate({
+			...this,
+			formData: initialSettings,
+		});
 
 		const form = templateElement.querySelector(
 			`#${this.prefix}`
@@ -75,6 +82,33 @@ export class Settings {
 				// TODO: add form validation
 				(result) => resolve(this.onSettingsSubmit(result, form))
 			);
+		});
+	}
+
+	private waitForSidebar(): Promise<HTMLDivElement> {
+		return new Promise((resolve) => {
+			const waitFn = () => {
+				const buttonContainer = this.window.document.querySelector(
+					"#content > ytd-mini-guide-renderer > #items"
+				);
+
+				if (buttonContainer) {
+					resolve(buttonContainer as HTMLDivElement);
+				} else {
+					this.window.setTimeout(() => waitFn(), 300);
+				}
+			};
+			waitFn();
+		});
+	}
+
+	private attachHeadButton() {
+		this.waitForSidebar().then((buttonContainer) => {
+			const buttonRenderWrapper = this.window.document.createElement("div");
+			buttonRenderWrapper.innerHTML = buttonTemplate(this);
+			const buttonElement = buttonRenderWrapper.firstElementChild!;
+			buttonContainer.appendChild(buttonElement);
+			buttonElement.addEventListener("click", () => this.showSettingsDialog());
 		});
 	}
 

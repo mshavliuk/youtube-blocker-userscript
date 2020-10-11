@@ -6,23 +6,23 @@ form(id=prefix)
           each val, index in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
               li
                 label
-                    input(type='checkbox' name='days' value=index)
+                    input(type='checkbox' name='days' value=index checked=formData.days.includes(index))
                     =val
     section(class=prefix + '__restricted-hours')
         h2(class=prefix + '__section-header')
             | Restricted hours
         label(class=prefix + '__field')
-            input(type='time' name='startTime' required)
+            input(type='time' name='startTime' value=formData.startTime required)
             | Start time
         label(class=prefix + '__field')
-            input(type='time' name='endTime' required)
+            input(type='time' name='endTime' value=formData.endTime required)
             | End time
         label(class=prefix + '__field')
-            input(type='number' name='dailyLimit' min='0' max='24')
+            input(type='number' name='dailyLimit' min='0' max='24' value=formData.dailyLimit)
             | Allowed hours per day
         label(class=prefix + '__field')
-            input(type='checkbox' name='breakAllowed')
+            input(type='checkbox' name='breakAllowed' checked=formData.breakAllowed)
             | Allow to make a break during restricted hours
         label(id=prefix + '__break-field' class=prefix + '__field' style="display: none;")
-            input(type='number' name='breakDuration' min='0' required)
+            input(type='number' name='breakDuration' min='0' value=value=formData.breakDuration required)
             | Break duration (minutes)
