@@ -7,7 +7,11 @@ import { WINDOW_TOKEN } from "./window-token";
 import { Blocker } from "./blocker";
 
 function isReady(window: Window): boolean {
-	return !!(window.document.body && window.localStorage);
+	return (
+		window.document.body instanceof HTMLElement &&
+		window.localStorage instanceof Storage &&
+		window.document instanceof Document
+	);
 }
 
 (async function main(window) {
@@ -30,12 +34,8 @@ function isReady(window: Window): boolean {
 		clock.stop();
 	});
 	const settings = Container.get(Settings);
-	// FIXME: Blocker could be instantiated asynchronously, but typedi doesn't support it
-	// see https://github.com/typestack/typedi/pull/126
-
-	const blocker = Container.get(Blocker);
 	if (!settings.isSettingsSpecified()) {
 		await settings.showSettingsDialog();
 	}
-	blocker.start();
+	Container.get(Blocker);
 })(typeof unsafeWindow !== "undefined" ? unsafeWindow : window);

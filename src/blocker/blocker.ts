@@ -14,15 +14,20 @@ export class Blocker {
 		private clock = Container.get(Clock),
 		private settings = Container.get(Settings),
 		private modal = Container.get(Modal)
-	) {}
+	) {
+		this.handleBlockOrDelay();
+	}
 
-	public start() {
-		const timeToBlock = this.getBlockData();
-		if (timeToBlock !== null) {
-			setTimeout(
-				() => this.handleBlock(timeToBlock.reason),
-				timeToBlock.remain
-			);
+	private handleBlockOrDelay() {
+		const blockData = this.getBlockData();
+		if (!blockData) {
+			return;
+		}
+
+		if (blockData.remain <= 0) {
+			this.handleBlock(blockData.reason);
+		} else {
+			this.window.setTimeout(() => this.handleBlockOrDelay(), blockData.remain);
 		}
 	}
 
