@@ -3,6 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const AddText2BundlePlugin = require("add-text-to-bundle-plugin");
 const fs = require("fs");
+const autoprefixer = require("autoprefixer");
 
 const glob = require("glob");
 
@@ -50,13 +51,16 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.s[ac]ss$/i,
+				test: /\.scss$/i,
 				use: [
-					// Creates `style` nodes from JS strings
 					"style-loader",
-					// Translates CSS into CommonJS
 					"css-loader",
-					// Compiles Sass to CSS
+					{
+						loader: "postcss-loader",
+						options: {
+							postcssOptions: { plugins: [autoprefixer()] },
+						},
+					},
 					{
 						loader: "sass-loader",
 						options: {

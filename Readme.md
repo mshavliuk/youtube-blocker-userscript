@@ -24,7 +24,7 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] Project description
 - [x] Dark theme
 - [x] Lunch time pause
-- [ ] Autoprefixer
+- [x] Autoprefixer
 - [ ] Add Babel
 - [ ] CI pipeline (build release)
 
