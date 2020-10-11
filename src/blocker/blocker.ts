@@ -37,7 +37,7 @@ export class Blocker {
 		const dailyLimit = this.settings.getSetting("dailyLimit");
 		if (dailyLimit !== null) {
 			timeToBlock = {
-				remain: Math.max(0, dailyLimit * 3600 - this.clock.getTimeSpent()),
+				remain: Math.max(0, dailyLimit * 3.6e6 - this.clock.getTimeSpent()),
 				reason: "limit",
 			};
 		}
