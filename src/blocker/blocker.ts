@@ -1,4 +1,4 @@
-import { Inject, Service } from "typedi";
+import { Container, Service } from "typedi";
 import { Settings } from "../settings";
 import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
@@ -9,10 +9,11 @@ export type BlockReason = "schedule" | "limit" | "breakEnd";
 @Service()
 export class Blocker {
 	constructor(
-		@Inject(WINDOW_TOKEN) private window: Window,
-		private clock: Clock,
-		private settings: Settings,
-		private modal: Modal
+		container: Container,
+		private window = Container.get(WINDOW_TOKEN),
+		private clock = Container.get(Clock),
+		private settings = Container.get(Settings),
+		private modal = Container.get(Modal)
 	) {}
 
 	public start() {

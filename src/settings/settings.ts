@@ -1,7 +1,7 @@
 import template from "./settings.pug";
 import "./settings.scss";
 import { Modal } from "../modal";
-import { Inject, Service } from "typedi";
+import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
 
 export type SettingsData = {
@@ -26,12 +26,13 @@ export class Settings {
 		breakDuration: null,
 	};
 
-	constructor(
-		@Inject(WINDOW_TOKEN) private window: Window,
-		private modal: Modal
-	) {}
-
 	private cachedSettings: SettingsData | null = null;
+
+	constructor(
+		container: Container,
+		private window = Container.get(WINDOW_TOKEN),
+		private modal = Container.get(Modal)
+	) {}
 
 	public isSettingsSpecified() {
 		return !!this.getSettings();

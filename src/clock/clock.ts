@@ -1,4 +1,4 @@
-import { Inject, Service } from "typedi";
+import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
 
 export type ClockData = {
@@ -17,7 +17,10 @@ export class Clock {
 	private clockStartedAt: Date | null = null;
 	private breakStartedAt: Date | null = null;
 
-	constructor(@Inject(WINDOW_TOKEN) private window: Window) {}
+	constructor(
+		container: Container,
+		private window = Container.get(WINDOW_TOKEN)
+	) {}
 
 	public start() {
 		this.clockStartedAt = this.clockStartedAt ?? new Date();

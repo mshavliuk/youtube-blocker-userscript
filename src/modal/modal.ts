@@ -1,6 +1,6 @@
 import "./modal.scss";
 import MicroModal from "micromodal";
-import { Inject, Service } from "typedi";
+import { Container, Service } from "typedi";
 import template from "./modal.pug";
 import { WINDOW_TOKEN } from "../window-token";
 
@@ -23,7 +23,10 @@ export class Modal {
 	private closeButtonElement: HTMLButtonElement;
 	private okCallback: (() => void) | null = null;
 
-	constructor(@Inject(WINDOW_TOKEN) private window: Window) {
+	constructor(
+		container: Container,
+		private window = Container.get(WINDOW_TOKEN)
+	) {
 		const wrapper = window.document.createElement("div");
 		wrapper.innerHTML = template(this);
 		const modalElement = wrapper.firstChild;
