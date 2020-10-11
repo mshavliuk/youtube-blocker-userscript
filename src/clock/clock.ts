@@ -1,5 +1,6 @@
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
+import * as visibility from "visibilityjs";
 
 export type ClockData = {
 	timeSpent: number;
@@ -20,7 +21,16 @@ export class Clock {
 	constructor(
 		container: Container,
 		private window = Container.get(WINDOW_TOKEN)
-	) {}
+	) {
+		visibility.change((event, state) => {
+			if (state === "visible") {
+				this.start();
+			} else {
+				this.stop();
+			}
+		});
+		window.addEventListener("beforeunload", () => this.stop());
+	}
 
 	public start() {
 		this.clockStartedAt = this.clockStartedAt ?? new Date();
