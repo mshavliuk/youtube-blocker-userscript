@@ -1,0 +1,19 @@
+div(id=prefix)
+    h1(class=prefix + '__title') Blocked
+    h3(class=prefix + '__subtitle')
+        if reason === 'schedule'
+            | You have visited the website during the time that was marked as restricted
+        else if reason === 'limit'
+            | You exceeded the time limits set for that website
+        else if reason === 'breakEnd'
+            | Your break during the work time is over
+    div(class=prefix + '__actions-block')
+        div(class=prefix + '__action' data-action='settings')
+            include ../../assets/miscellaneous_services.svg
+            span(class=prefix + '__action-name') Settings
+        div(class=prefix + '__action')
+            include ../../assets/alarm.svg
+            span(class=prefix + '__action-name') Time you spent
+        div(class=prefix + '__action')
+            include ../../assets/lock_open.svg
+            span(class=prefix + '__action-name') Time to unlock

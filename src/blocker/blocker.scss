@@ -1,0 +1,85 @@
+@import "../global";
+
+$prefix: #{$globalPrefix}__blocker;
+
+##{$prefix} {
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+  font-size: 16px;
+  display: flex;
+  padding: 2em;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
+  color: rgba(0, 0, 0, 0.8);
+
+
+  [dark] & {
+    background-color: #212121;
+    color: #fff;
+  }
+}
+
+.#{$prefix}__title {
+  margin-bottom: 1em;
+  font-size: 32px;
+}
+
+.#{$prefix}__subtitle {
+  margin-bottom: 3em;
+  font-size: 18px;
+}
+
+.#{$prefix}__actions-block {
+  display: flex;
+  min-width: 80%;
+  flex-direction: row;
+  justify-content: space-around;
+
+  .#{$prefix}__action {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    margin: 1em;
+    cursor: pointer;
+
+    > svg {
+      width: 2em;
+      height: 2em;
+      margin-bottom: 1em;
+      fill: rgba(0, 0, 0, 0.8);
+
+      [dark] & {
+        fill: #909090;
+      }
+    }
+
+    .#{$prefix}__action-name {
+      font-size: 20px;
+    }
+  }
+}
+
+
+.#{$prefix}__btn-primary {
+  background-color: transparent;
+  color: #065fd4;
+  border: {
+    width: 1px;
+    style: solid;
+    color: #065fd4;
+  }
+
+  [dark] & {
+    color: #3ea6ff;
+    border-color: #3ea6ff;
+  }
+}
+

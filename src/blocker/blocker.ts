@@ -3,11 +3,15 @@ import { Settings } from "../settings";
 import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
 import { Clock } from "../clock";
+import template from "./blocker.pug";
+import "./blocker.scss";
 
 export type BlockReason = "schedule" | "limit" | "breakEnd";
 
 @Service()
 export class Blocker {
+	public readonly prefix = `${HTML_PREFIX}__blocker`;
+
 	private set timerId(value: number | null) {
 		if (this._timerId) {
 			clearTimeout(this._timerId);
@@ -127,7 +131,7 @@ export class Blocker {
 				})
 				.then((ok) => {
 					if (!ok) {
-						this.block();
+						this.block(reason);
 						return;
 					}
 
@@ -141,8 +145,7 @@ export class Blocker {
 				});
 			return;
 		} else {
-			this.block();
-			this.modal.attach();
+			this.block(reason);
 			this.modal.show({
 				title: "Block",
 				content: `The ${this.window.location.hostname} was blocked. Reason: ${reason}`,
@@ -151,8 +154,19 @@ export class Blocker {
 		}
 	}
 
-	private block() {
+	private block(reason: BlockReason) {
 		this.clock.stop();
+		const wrapper = this.window.document.createElement("div");
+		wrapper.innerHTML = template({ ...this, reason });
+		this.bindInteractions(wrapper);
 		this.window.document.body.innerHTML = "";
+		this.window.document.body.appendChild(wrapper.firstElementChild!);
+		this.modal.attach();
+	}
+
+	private bindInteractions(element: HTMLDivElement) {
+		element
+			.querySelector('[data-action="settings"]')!
+			.addEventListener("click", () => this.settings.showSettingsDialog());
 	}
 }
