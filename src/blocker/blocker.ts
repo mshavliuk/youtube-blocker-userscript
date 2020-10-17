@@ -8,6 +8,16 @@ export type BlockReason = "schedule" | "limit" | "breakEnd";
 
 @Service()
 export class Blocker {
+	private set timerId(value: number | null) {
+		if (this._timerId) {
+			clearTimeout(this._timerId);
+		}
+
+		this._timerId = value;
+	}
+
+	private _timerId: number | null = null;
+
 	constructor(
 		container: Container,
 		private window = Container.get(WINDOW_TOKEN),
@@ -15,6 +25,14 @@ export class Blocker {
 		private settings = Container.get(Settings),
 		private modal = Container.get(Modal)
 	) {
+		this.handleBlockOrDelay();
+		this.settings.onSettingsChange(() => this.reset());
+	}
+
+	public reset() {
+		if (this._timerId) {
+			clearTimeout(this._timerId);
+		}
 		this.handleBlockOrDelay();
 	}
 
@@ -27,7 +45,10 @@ export class Blocker {
 		if (blockData.remain <= 0) {
 			this.handleBlock(blockData.reason);
 		} else {
-			this.window.setTimeout(() => this.handleBlockOrDelay(), blockData.remain);
+			this.timerId = this.window.setTimeout(
+				() => this.handleBlockOrDelay(),
+				blockData.remain
+			);
 		}
 	}
 
@@ -105,17 +126,18 @@ export class Blocker {
 					closeButton: "Block",
 				})
 				.then((ok) => {
-					if (ok) {
-						this.clock.startBreakPeriod();
-						setTimeout(() => {
-							const blockData = this.getBlockData();
-							if (blockData) {
-								this.handleBlock("breakEnd");
-							}
-						}, breakTimeLeft);
-					} else {
+					if (!ok) {
 						this.block();
+						return;
 					}
+
+					this.clock.startBreakPeriod();
+					this.timerId = this.window.setTimeout(() => {
+						const blockData = this.getBlockData();
+						if (blockData) {
+							this.handleBlock("breakEnd");
+						}
+					}, breakTimeLeft);
 				});
 			return;
 		} else {

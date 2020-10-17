@@ -29,6 +29,7 @@ export class Settings {
 	};
 
 	private cachedSettings: SettingsData | null = null;
+	private subscribers: ((_: SettingsData) => void)[] = [];
 
 	constructor(
 		container: Container,
@@ -40,6 +41,10 @@ export class Settings {
 
 	public isSettingsSpecified() {
 		return !!this.getSettings();
+	}
+
+	public onSettingsChange(fn: (settings: SettingsData) => void) {
+		this.subscribers.push(fn);
 	}
 
 	public getSettings(): SettingsData | null {
@@ -146,6 +151,8 @@ export class Settings {
 				breakDurationField.setAttribute("style", "display: none");
 			}
 		});
+		// triggers initial state
+		breakCheckbox.dispatchEvent(new Event("change"));
 	}
 
 	private onSettingsSubmit(
@@ -179,6 +186,11 @@ export class Settings {
 			days: Array.from(strData.days ?? []).map(Number),
 		};
 		this.setSettings(data);
+		this.notifyOnSettingsChange(data);
 		return data;
+	}
+
+	private notifyOnSettingsChange(data: SettingsData) {
+		this.subscribers.forEach((fn) => fn(data));
 	}
 }
