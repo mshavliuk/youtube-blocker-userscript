@@ -13,7 +13,13 @@ div(id=prefix)
             span(class=prefix + '__action-name') Settings
         div(class=prefix + '__action')
             include ../../assets/alarm.svg
-            span(class=prefix + '__action-name') Time you spent
+            span(class=prefix + '__action-name')
+                | Time you spent:
+                br
+                | #{(spentTime / 6e4).toFixed(1)} minutes
         div(class=prefix + '__action')
             include ../../assets/lock_open.svg
-            span(class=prefix + '__action-name') Time to unlock
+            span(class=prefix + '__action-name')
+                | Will be unlocked:
+                br
+                =unlockTime

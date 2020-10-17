@@ -27,12 +27,12 @@ $prefix: #{$globalPrefix}__blocker;
 }
 
 .#{$prefix}__title {
-  margin-bottom: 1em;
+  margin: 0 0 1em;
   font-size: 32px;
 }
 
 .#{$prefix}__subtitle {
-  margin-bottom: 3em;
+  margin: 0 0 2em;
   font-size: 18px;
 }
 
@@ -42,13 +42,13 @@ $prefix: #{$globalPrefix}__blocker;
   flex-direction: row;
   justify-content: space-around;
 
+
   .#{$prefix}__action {
     display: flex;
     flex-direction: column;
     padding: 1em;
     align-items: center;
     margin: 1em;
-    cursor: pointer;
 
     > svg {
       width: 2em;
@@ -63,6 +63,11 @@ $prefix: #{$globalPrefix}__blocker;
 
     .#{$prefix}__action-name {
       font-size: 20px;
+      text-align: center;
+    }
+
+    &[data-action] {
+      cursor: pointer;
     }
   }
 }

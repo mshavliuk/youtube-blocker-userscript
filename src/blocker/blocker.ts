@@ -157,7 +157,18 @@ export class Blocker {
 	private block(reason: BlockReason) {
 		this.clock.stop();
 		const wrapper = this.window.document.createElement("div");
-		wrapper.innerHTML = template({ ...this, reason });
+		let unlockTime = null;
+		if (reason === "limit") {
+			unlockTime = "tomorrow";
+		} else {
+			unlockTime = this.settings.getSetting("endTime");
+		}
+		wrapper.innerHTML = template({
+			...this,
+			spentTime: this.clock.getTimeSpent(),
+			reason,
+			unlockTime,
+		});
 		this.bindInteractions(wrapper);
 		this.window.document.body.innerHTML = "";
 		this.window.document.body.appendChild(wrapper.firstElementChild!);
