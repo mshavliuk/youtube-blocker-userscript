@@ -1,7 +1,8 @@
 on:
   push:
-#    tags:
-#      - 'v*'
+    tags:
+      - v*
+      - latest
 
 name: Create Release
 
