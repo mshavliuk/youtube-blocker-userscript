@@ -4,4 +4,9 @@ $prefix: #{$globalPrefix}__settings-button;
 
 ##{$prefix} a {
   user-select: none;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
