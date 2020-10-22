@@ -17,6 +17,7 @@ export class Clock {
 
 	private clockStartedAt: Date | null = null;
 	private breakStartedAt: Date | null = null;
+	private breakResumed = false;
 
 	constructor(
 		container: Container,
@@ -34,6 +35,10 @@ export class Clock {
 
 	public start() {
 		this.clockStartedAt = this.clockStartedAt ?? new Date();
+
+		if (this.breakResumed) {
+			this.breakStartedAt = new Date();
+		}
 	}
 
 	public stop() {
@@ -43,6 +48,8 @@ export class Clock {
 
 		this.saveState();
 		this.clockStartedAt = null;
+		this.breakResumed = !!this.breakStartedAt;
+		this.breakStartedAt = null;
 	}
 
 	public startBreakPeriod() {
