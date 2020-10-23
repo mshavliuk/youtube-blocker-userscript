@@ -25,7 +25,6 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [x] Dark theme
 - [x] Lunch time pause
 - [x] Autoprefixer
-- [ ] Add Babel
 - [x] CI pipeline (build release)
 
 ### Extra features for the following releases

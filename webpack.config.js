@@ -71,7 +71,6 @@ module.exports = {
 			},
 		],
 	},
-	// plugins: [new UglifyJsPlugin()],
 	plugins: [
 		new AddText2BundlePlugin({
 			text: fs.readFileSync("./src/script-header.js", "utf8"),

@@ -20,7 +20,12 @@ jobs:
       - run: npm run build
         env:
           CI: true
-
+      - name: Check ES5 compability
+        uses: actions/es-check-action@1.0.2
+        with:
+          directory: 'dist'
+          ecmaVersion: 'es5'
+          files: '*.js'
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
