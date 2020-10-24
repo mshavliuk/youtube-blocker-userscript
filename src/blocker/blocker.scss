@@ -19,7 +19,6 @@ $prefix: #{$globalPrefix}__blocker;
   right: 0;
   color: rgba(0, 0, 0, 0.8);
 
-
   [dark] & {
     background-color: #212121;
     color: #fff;
@@ -41,7 +40,6 @@ $prefix: #{$globalPrefix}__blocker;
   min-width: 80%;
   flex-direction: row;
   justify-content: space-around;
-
 
   .#{$prefix}__action {
     display: flex;
@@ -72,7 +70,6 @@ $prefix: #{$globalPrefix}__blocker;
   }
 }
 
-
 .#{$prefix}__btn-primary {
   background-color: transparent;
   color: #065fd4;
@@ -87,4 +84,3 @@ $prefix: #{$globalPrefix}__blocker;
     border-color: #3ea6ff;
   }
 }
-
