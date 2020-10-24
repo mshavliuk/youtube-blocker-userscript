@@ -1,0 +1,25 @@
+on: push
+
+name: Test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install dependencies
+        run: npm install
+      - name: Lint
+        run: npm run pretest
+      - name: Build
+        run: npm run build
+      - name: Check ES5 compability
+        uses: ali-kamalizade/es-check-action@1.0.2
+        with:
+          directory: 'dist'
+          ecmaVersion: 'es5'
+          files: '*.js'

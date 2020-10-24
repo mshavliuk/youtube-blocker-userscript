@@ -17,15 +17,8 @@ jobs:
           node-version: 12
       - name: Install dependencies
         run: npm install
-      - run: npm run build
-        env:
-          CI: true
-      - name: Check ES5 compability
-        uses: actions/es-check-action@1.0.2
-        with:
-          directory: 'dist'
-          ecmaVersion: 'es5'
-          files: '*.js'
+      - name: Build
+        run: npm run build
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
