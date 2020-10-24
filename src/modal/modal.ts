@@ -7,99 +7,93 @@ import { WINDOW_TOKEN } from "../window-token";
 export interface ShowModalOptions {
 	title: string;
 	content: string | HTMLElement;
-	closeButton?: string | null;
-	okButton?: string | null;
+	closeButton: string | null;
+	okButton: string | null;
 }
 
 @Service()
 export class Modal {
 	public readonly prefix = `${HTML_PREFIX}__modal`;
-	private readonly templateId: string;
-	private readonly modalElement: HTMLElement;
 
-	private titleElement: HTMLHeadingElement;
-	private contentElement: HTMLDivElement;
-	private okButtonElement: HTMLButtonElement;
-	private closeButtonElement: HTMLButtonElement;
+	private readonly modalOptionsDefaults: ShowModalOptions = {
+		title: "",
+		content: "",
+		closeButton: "Close",
+		okButton: "Ok",
+	};
+
 	private okCallback: (() => void) | null = null;
 
 	constructor(
 		container: Container,
 		private window = Container.get(WINDOW_TOKEN)
-	) {
-		const wrapper = window.document.createElement("div");
-		wrapper.innerHTML = template(this);
-		const modalElement = wrapper.firstChild;
-		if (!(modalElement instanceof HTMLElement)) {
-			throw new Error("Template is not instanceof HTMLElement");
-		}
-		this.modalElement = modalElement;
-		this.templateId = this.modalElement.id;
-		this.titleElement = this.modalElement.querySelector<HTMLHeadingElement>(
-			`#${this.prefix}__title`
-		)!;
-		this.contentElement = this.modalElement.querySelector<HTMLDivElement>(
-			`#${this.prefix}__content`
-		)!;
-		this.okButtonElement = this.modalElement.querySelector<HTMLButtonElement>(
-			"[data-micromodal-ok]"
-		)!;
-		this.closeButtonElement = this.modalElement.querySelector<
-			HTMLButtonElement
-		>("[data-micromodal-close]")!;
-		this.okButtonElement.addEventListener("click", () => {
-			if (this.okCallback) {
-				this.okCallback();
-			}
-		});
-		this.attach();
-	}
+	) {}
 
-	public attach() {
-		this.window.document.body.appendChild(this.modalElement);
+	public show(options: Partial<ShowModalOptions>): Promise<boolean> {
+		const modalElement = this.render(options);
+
+		this.window.document.body.appendChild(modalElement);
 		MicroModal.init();
-	}
-
-	public show(options: ShowModalOptions): Promise<boolean> {
-		this.fillModal(options);
 
 		return new Promise((resolve) => {
-			MicroModal.show(this.templateId, {
+			MicroModal.show(modalElement.id, {
 				onClose: () => {
-					this.setOkCallback(null);
-					this.contentElement.innerHTML = "";
-					this.titleElement.innerText = "";
-					this.okButtonElement.innerText = "";
-					this.closeButtonElement.innerText = "";
+					this.window.document.body.removeChild(modalElement);
 					resolve(false);
 				},
 			});
 
-			this.setOkCallback(() => {
-				this.setOkCallback(null);
+			this.okCallback = () => {
+				this.okCallback = null;
 				resolve(true);
-				MicroModal.close(this.templateId);
-			});
+				MicroModal.close(modalElement.id);
+			};
 		});
 	}
 
-	private fillModal({
-		title,
-		content,
-		closeButton,
-		okButton,
-	}: ShowModalOptions) {
-		this.titleElement.innerText = title;
-		this.okButtonElement.innerText = okButton ?? "Ok";
-		this.closeButtonElement.innerText = closeButton ?? "Close";
-		if (typeof content === "string") {
-			this.contentElement.innerText = content;
-		} else if (content instanceof HTMLElement) {
-			this.contentElement.appendChild(content);
-		}
-	}
+	private render(options: Partial<ShowModalOptions>): HTMLElement {
+		const renderOptions: ShowModalOptions & this = {
+			...this.modalOptionsDefaults,
+			...this,
+			...options,
+		};
 
-	private setOkCallback(fn: (() => void) | null) {
-		this.okCallback = fn;
+		if (options.content instanceof HTMLElement) {
+			renderOptions.content = "";
+		}
+
+		const wrapper = window.document.createElement("div");
+		wrapper.innerHTML = template(renderOptions);
+
+		const modalElement = wrapper.firstElementChild;
+		if (!(modalElement instanceof HTMLElement)) {
+			throw new Error("Template is not instanceof HTMLElement");
+		}
+
+		const okButton = modalElement.querySelector<HTMLButtonElement>(
+			"[data-micromodal-ok]"
+		)!;
+
+		okButton.addEventListener("click", () => {
+			if (this.okCallback) {
+				this.okCallback();
+			}
+		});
+
+		if (options.content instanceof HTMLElement) {
+			const contentElement = modalElement.querySelector<HTMLDivElement>(
+				`#${this.prefix}__content`
+			)!;
+			contentElement.appendChild(options.content);
+		}
+
+		const contentForms = modalElement.querySelectorAll("form");
+		if (contentForms.length === 1) {
+			const contentForm = contentForms.item(0);
+			contentForm.id = contentForm.id ?? `${this.prefix}__form`;
+			okButton.setAttribute("form", contentForm.id);
+		}
+
+		return modalElement;
 	}
 }

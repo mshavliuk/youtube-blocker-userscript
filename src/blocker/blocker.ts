@@ -172,7 +172,6 @@ export class Blocker {
 		this.bindInteractions(wrapper);
 		this.window.document.body.innerHTML = "";
 		this.window.document.body.appendChild(wrapper.firstElementChild!);
-		this.modal.attach();
 	}
 
 	private bindInteractions(element: HTMLDivElement) {
