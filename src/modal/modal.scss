@@ -2,11 +2,6 @@
 
 $prefix: #{$globalPrefix}__modal;
 
-/**************************  \
-  Basic Modal Styles
-\  **************************/
-
-
 ##{$prefix} {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
   font-size: 16px;
@@ -29,7 +24,6 @@ $prefix: #{$globalPrefix}__modal;
   justify-content: center;
   align-items: center;
 }
-
 
 .#{$prefix}__container {
   width: 500px;
