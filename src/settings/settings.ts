@@ -36,7 +36,7 @@ export class Settings {
 		private window = Container.get(WINDOW_TOKEN),
 		private modal = Container.get(Modal)
 	) {
-		this.attachHeadButton();
+		this.attachCompactButton();
 	}
 
 	public isSettingsSpecified() {
@@ -108,32 +108,20 @@ export class Settings {
 		});
 	}
 
-	private attachHeadButton() {
-		const attachFn = (buttonContainer: HTMLDivElement) => {
-			const buttonRenderWrapper = this.window.document.createElement("div");
-			buttonRenderWrapper.innerHTML = buttonTemplate(this);
-			const buttonElement = buttonRenderWrapper.firstElementChild!;
-			buttonContainer.appendChild(buttonElement);
-			buttonElement.addEventListener("click", () => this.showSettingsDialog());
-		};
-
-		// There are some re-rendering after sidebar initialization so the button can be removed
-		const reattachFn = (buttonContainer: HTMLDivElement, counter = 0) => {
-			if (!buttonContainer.querySelector(`#${this.prefix}-button`)) {
-				attachFn(buttonContainer);
-			}
-			if (counter < 5) {
-				counter += 1;
-				setTimeout(
-					() => reattachFn(buttonContainer, counter + 1),
-					counter * 1000
-				);
-			}
-		};
+	private attachCompactButton() {
+		const buttonRenderWrapper = this.window.document.createElement("div");
+		buttonRenderWrapper.innerHTML = buttonTemplate(this);
+		const buttonElement = buttonRenderWrapper.firstElementChild!;
+		buttonElement.addEventListener("click", () => this.showSettingsDialog());
 
 		this.waitForSidebar().then((buttonContainer) => {
-			attachFn(buttonContainer);
-			reattachFn(buttonContainer);
+			buttonContainer.appendChild(buttonElement);
+
+			new MutationObserver(() => {
+				if (!buttonContainer.querySelector(`#${this.prefix}-button`)) {
+					buttonContainer.appendChild(buttonElement);
+				}
+			}).observe(buttonContainer, { childList: true });
 		});
 	}
 
