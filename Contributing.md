@@ -9,29 +9,30 @@ _[Use GitHub interface](https://blog.sapegin.me/all/open-source-for-everyone/) f
 ## Prerequisites
 
 - If it’s your first pull request, watch [this amazing course](http://makeapullrequest.com/) by [Kent C. Dodds](https://twitter.com/kentcdodds).
-- Install [EditorConfig](http://editorconfig.org/) plugin for your code editor to make sure it uses correct settings.
 - Fork the repository and clone your fork.
 - Install dependencies: `npm install`.
 
 ## Development workflow
 
-Run linters and tests:
+Build the js bundle for development purposes:
 
 ```bash
-npm test
+npm run dev
 ```
 
-Or run tests in watch mode:
+Build the js bundle for production purposes:
 
 ```bash
-npm run test:watch
+npm run build
 ```
 
-To update Jest snapshots:
+Run linters:
 
 ```bash
-npm run test:jest -- -u
+npm run pretest
 ```
+
+Run tests: [WIP]
 
 **Don’t forget to add tests and update documentation for your changes.**
 
@@ -40,7 +41,6 @@ npm run test:jest -- -u
 ## Other notes
 
 - If you have commit access to repository and want to make big change or not sure about something, make a new branch and open pull request.
-- We’re using [Prettier](https://github.com/prettier/prettier) to format code, so don’t worry much about code formatting.
 - Don’t commit generated files, like minified JavaScript.
 - Don’t change version number and change log.
 
