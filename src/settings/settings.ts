@@ -1,7 +1,9 @@
-import modalTemplate from "./settings-modal.pug";
-import buttonTemplate from "./settings-button.pug";
 import "./settings-modal.scss";
 import "./settings-button.scss";
+import "../info-tooltip";
+
+import modalTemplate from "./settings-modal.pug";
+import buttonTemplate from "./settings-button.pug";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";

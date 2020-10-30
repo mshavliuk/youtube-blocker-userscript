@@ -1,7 +1,10 @@
+include ../info-tooltip/info-tooltip
+
 form(id=prefix)
     section(class=prefix + '__restricted-days')
         h2(class=prefix + '__section-header')
             | Restricted days
+            +info-tooltip('Check the days when the site usage will be restricted by the schedule')
         ul(class=prefix + '__days-list')
           each val, index in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
               li
@@ -14,15 +17,20 @@ form(id=prefix)
         label(class=prefix + '__field')
             input(type='time' name='startTime' value=formData.startTime required)
             | Start time
+            +info-tooltip('Start of scheduled time when the site will be blocked')
         label(class=prefix + '__field')
             input(type='time' name='endTime' value=formData.endTime required)
             | End time
+            +info-tooltip('End of scheduled restricted time')
         label(class=prefix + '__field')
             input(type='number' name='dailyLimit' min='0' max='24' value=formData.dailyLimit)
             | Allowed hours per day
+            +info-tooltip('The maximum amount of hours you can spend until the site will blocked')
         label(class=prefix + '__field')
             input(type='checkbox' name='breakAllowed' checked=formData.breakAllowed)
             | Allow to make a break during restricted hours
+            +info-tooltip('Enables the small time period to take a break and unlock the site')
         label(id=prefix + '__break-field' class=prefix + '__field' style="display: none;")
             input(type='number' name='breakDuration' min='0' value=value=formData.breakDuration required)
             | Break duration (minutes)
+            +info-tooltip('The amount of time allowed to spend on the site during restricted hours. May be used for a lunch timeout.')
