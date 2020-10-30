@@ -74,8 +74,6 @@ export class Blocker {
 
 			const scheduleBlockStart = this.settings.getSetting("startTime");
 			const scheduleBlockEnd = this.settings.getSetting("endTime");
-			// TODO: time to unlock
-			// TODO: take the following day into account
 
 			const blockTimeStart = Date.parse(
 				`${todayDateString}T${scheduleBlockStart}`
