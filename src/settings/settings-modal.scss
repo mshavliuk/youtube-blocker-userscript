@@ -8,8 +8,19 @@ $prefix: #{$globalPrefix}__settings;
 
 .#{$prefix}__restricted-days {
   .#{$prefix}__days-list {
+    display: flex;
+    justify-content: space-around;
     margin: 0 0 1em;
     padding: 0;
+
+    input[type="checkbox"] {
+      display: block;
+      margin: auto;
+    }
+
+    .#{$prefix}__day-name {
+      margin-top: 0.5em;
+    }
 
     li {
       list-style: none;
@@ -18,7 +29,7 @@ $prefix: #{$globalPrefix}__settings;
   }
 }
 
-input {
+##{$prefix} input {
   margin-right: 1em;
 
   &:not([type='checkbox']) {
