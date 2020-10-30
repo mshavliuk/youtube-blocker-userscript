@@ -1,0 +1,6 @@
+- var _prefix = 'youtube-blocker__info-tooltip'
+
+mixin info-tooltip(content)
+    span(class=_prefix)
+        include ../../assets/info.svg
+        span(class=_prefix + '__text')=content
