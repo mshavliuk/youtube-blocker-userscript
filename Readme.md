@@ -46,6 +46,10 @@ Everyone is welcome to contribute. Please take a moment to review the [contribut
 - [ ] "Reduce distraction" mode
 - [ ] Statistic
 
+## 💰 Support
+
+If you found this project useful, feel free to send me some [BAT tokens](https://basicattentiontoken.org/about/) - currently, it is the only way to support. You can also leave any suggestions as a [Github issue](https://github.com/mshavliuk/youtube-blocker-userscript/issues).
+
 ## 📝 Licence
 
 MIT License, see the included [License.md](License.md) file.
