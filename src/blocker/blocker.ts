@@ -168,6 +168,16 @@ export class Blocker {
 			unlockTime,
 		});
 		this.bindInteractions(wrapper);
+
+		const videoElement: HTMLVideoElement | null = this.window.document
+			.getElementsByTagName("video")
+			.item(0);
+		if (videoElement) {
+			videoElement.pause();
+			videoElement.removeAttribute("src");
+			videoElement.load();
+		}
+
 		this.window.document.body.innerHTML = "";
 		this.window.document.body.appendChild(wrapper.firstElementChild!);
 	}
