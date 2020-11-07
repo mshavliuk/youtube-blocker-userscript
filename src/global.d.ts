@@ -14,4 +14,8 @@ declare module "*.html" {
 	export default content;
 }
 
+interface Window {
+	ytEventsEventsListeners?: Record<number, [EventTarget, string, () => void]>;
+}
+
 declare const unsafeWindow: Window;

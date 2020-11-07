@@ -155,7 +155,7 @@ export class Blocker {
 	private block(reason: BlockReason) {
 		this.clock.stop();
 		const wrapper = this.window.document.createElement("div");
-		let unlockTime = null;
+		let unlockTime;
 		if (reason === "limit") {
 			unlockTime = "tomorrow";
 		} else {
@@ -179,12 +179,56 @@ export class Blocker {
 		}
 
 		this.window.document.body.innerHTML = "";
+
+		this.window.document.head
+			.querySelectorAll("script")
+			.forEach((script) => script.remove());
+
 		this.window.document.body.appendChild(wrapper.firstElementChild!);
+
+		this.destroyYtLogic();
+		this.cutNetwork();
+	}
+
+	private destroyYtLogic() {
+		if (this.window.ytEventsEventsListeners) {
+			Object.values(
+				this.window.ytEventsEventsListeners
+			).forEach(([target, event, callback]) =>
+				target.removeEventListener(event, callback)
+			);
+		}
+		for (const prop of Object.keys(this.window)) {
+			if (prop.startsWith("yt") && this.window.hasOwnProperty(prop)) {
+				try {
+					delete this.window[prop as keyof Window];
+				} catch (e) {}
+			}
+		}
+		const lastIntervalId = this.window.setInterval(this.noop, -1);
+		for (let i = 1; i < lastIntervalId; i++) {
+			this.window.clearInterval(i);
+		}
+		const lastTimeoutId = this.window.setTimeout(this.noop, -1);
+		for (let i = 1; i < lastTimeoutId; i++) {
+			this.window.clearTimeout(i);
+		}
+	}
+
+	private cutNetwork() {
+		try {
+			XMLHttpRequest.prototype.send = this.noop;
+			this.window.navigator.sendBeacon = () => false;
+		} catch (e) {}
 	}
 
 	private bindInteractions(element: HTMLDivElement) {
 		element
 			.querySelector('[data-action="settings"]')!
 			.addEventListener("click", () => this.settings.showSettingsDialog());
+	}
+
+	private noop() {
+		return undefined;
 	}
 }
