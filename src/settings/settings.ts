@@ -7,6 +7,7 @@ import buttonTemplate from "./settings-button.pug";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
+import { flatpickr } from "../flatpickr";
 
 export type SettingsData = {
 	days: number[];
@@ -141,6 +142,16 @@ export class Settings {
 				breakDurationField.setAttribute("style", "display: none");
 			}
 		});
+		form.querySelectorAll("[type='time']").forEach((input) => {
+			flatpickr(input, {
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: "H:i",
+				time_24hr: true,
+				static: true,
+			});
+		});
+
 		// triggers initial state
 		breakCheckbox.dispatchEvent(new Event("change"));
 	}
