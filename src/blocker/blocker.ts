@@ -184,10 +184,10 @@ export class Blocker {
 			.querySelectorAll("script")
 			.forEach((script) => script.remove());
 
-		this.window.document.body.appendChild(wrapper.firstElementChild!);
-
 		this.destroyYtLogic();
 		this.cutNetwork();
+
+		this.window.document.body.appendChild(wrapper.firstElementChild!);
 	}
 
 	private destroyYtLogic() {
