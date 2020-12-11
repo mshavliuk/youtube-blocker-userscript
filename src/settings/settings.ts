@@ -1,9 +1,9 @@
 import "./settings-modal.scss";
-import "./settings-button.scss";
+import "./settings-compact-button.scss";
 import "../info-tooltip";
 
 import modalTemplate from "./settings-modal.pug";
-import buttonTemplate from "./settings-button.pug";
+import compactButtonTemplate from "./settings-compact-button.pug";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
@@ -94,7 +94,7 @@ export class Settings {
 		});
 	}
 
-	private waitForSidebar(): Promise<HTMLDivElement> {
+	private waitForCompactSidebar(): Promise<HTMLDivElement> {
 		return new Promise((resolve) => {
 			const waitFn = () => {
 				const buttonContainer = this.window.document.querySelector(
@@ -113,15 +113,15 @@ export class Settings {
 
 	private attachCompactButton() {
 		const buttonRenderWrapper = this.window.document.createElement("div");
-		buttonRenderWrapper.innerHTML = buttonTemplate(this);
+		buttonRenderWrapper.innerHTML = compactButtonTemplate(this);
 		const buttonElement = buttonRenderWrapper.firstElementChild!;
 		buttonElement.addEventListener("click", () => this.showSettingsDialog());
 
-		this.waitForSidebar().then((buttonContainer) => {
+		this.waitForCompactSidebar().then((buttonContainer) => {
 			buttonContainer.appendChild(buttonElement);
 
 			new MutationObserver(() => {
-				if (!buttonContainer.querySelector(`#${this.prefix}-button`)) {
+				if (!buttonContainer.querySelector(`#${this.prefix}-compact-button`)) {
 					buttonContainer.appendChild(buttonElement);
 				}
 			}).observe(buttonContainer, { childList: true });
