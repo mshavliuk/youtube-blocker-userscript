@@ -18,6 +18,7 @@ export type SettingsData = {
 	dailyLimit: number | null;
 	breakAllowed: boolean;
 	breakDuration: number | null;
+	readonlyWhenBlocked: boolean;
 };
 
 @Service()
@@ -31,6 +32,7 @@ export class Settings {
 		dailyLimit: null,
 		breakAllowed: false,
 		breakDuration: null,
+		readonlyWhenBlocked: true,
 	};
 
 	private cachedSettings: SettingsData | null = null;
@@ -75,24 +77,29 @@ export class Settings {
 		this.cachedSettings = settings;
 	}
 
-	public async showSettingsDialog(): Promise<SettingsData | null> {
+	public async showSettingsDialog(
+		readOnly = false
+	): Promise<SettingsData | null> {
 		const initialSettings = this.getSettings() ?? this.defaults;
 		const templateElement = document.createElement("div");
 		templateElement.innerHTML = modalTemplate({
 			...this,
 			formData: initialSettings,
+			readOnly,
 		});
 
 		const form = templateElement.querySelector(
 			`#${this.prefix}`
 		) as HTMLFormElement;
 
-		this.bindFormInteraction(form);
+		if (!readOnly) {
+			this.bindFormInteraction(form);
+		}
 
 		return new Promise((resolve) => {
 			this.modal.show({ title: "Settings", content: templateElement }).then(
 				// TODO: add form validation
-				(result) => resolve(this.onSettingsSubmit(result, form))
+				(result) => resolve(this.onSettingsSubmit(!readOnly && result, form))
 			);
 		});
 	}
@@ -221,6 +228,7 @@ export class Settings {
 			breakDuration: Number(strData.breakDuration) || null,
 			dailyLimit: strData.dailyLimit ? Number(strData.dailyLimit) : null,
 			days: Array.from(strData.days ?? []).map(Number),
+			readonlyWhenBlocked: strData.readonlyWhenBlocked === "on",
 		};
 		this.setSettings(data);
 		this.notifyOnSettingsChange(data);

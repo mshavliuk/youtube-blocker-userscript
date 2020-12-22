@@ -2,6 +2,10 @@
 
 $prefix: #{$globalPrefix}__settings;
 
+.#{$prefix}__readonly-notification {
+  font-weight: bold;
+}
+
 .#{$prefix}__section-header {
   margin: 1em 0 0.5em;
 }

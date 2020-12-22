@@ -223,9 +223,12 @@ export class Blocker {
 	}
 
 	private bindInteractions(element: HTMLDivElement) {
+		const readOnlySettings = this.settings.getSetting("readonlyWhenBlocked");
 		element
 			.querySelector('[data-action="settings"]')!
-			.addEventListener("click", () => this.settings.showSettingsDialog());
+			.addEventListener("click", () =>
+				this.settings.showSettingsDialog(readOnlySettings)
+			);
 	}
 
 	private noop() {
