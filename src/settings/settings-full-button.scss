@@ -1,0 +1,27 @@
+@import "../global";
+
+$prefix: #{$globalPrefix}__settings-full-button;
+
+.#{$prefix}__link {
+  padding: 0 24px;
+}
+
+.#{$prefix}__icon {
+  height: 24px;
+  width: 24px;
+  margin-right: 24px;
+  color: #606060;
+
+  [dark] & {
+    color: #909090;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+}
+
+.#{$prefix}__title {
+  -webkit-font-smoothing: antialiased;
+  font-family: Roboto, Noto, sans-serif;
+}

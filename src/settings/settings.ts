@@ -1,9 +1,11 @@
 import "./settings-modal.scss";
 import "./settings-compact-button.scss";
+import "./settings-full-button.scss";
 import "../info-tooltip";
 
 import modalTemplate from "./settings-modal.pug";
 import compactButtonTemplate from "./settings-compact-button.pug";
+import fullButtonTemplate from "./settings-full-button.pug";
 import { Modal } from "../modal";
 import { Container, Service } from "typedi";
 import { WINDOW_TOKEN } from "../window-token";
@@ -40,6 +42,7 @@ export class Settings {
 		private modal = Container.get(Modal)
 	) {
 		this.attachCompactButton();
+		this.attachFullViewButton();
 	}
 
 	public isSettingsSpecified() {
@@ -110,6 +113,22 @@ export class Settings {
 			waitFn();
 		});
 	}
+	private waitForFullSidebarHistoryButton(): Promise<HTMLDivElement> {
+		return new Promise((resolve) => {
+			const waitFn = () => {
+				const fullViewHistoryButton = this.window.document.querySelector(
+					'#content ytd-guide-renderer [href="/feed/history"]'
+				);
+
+				if (fullViewHistoryButton) {
+					resolve(fullViewHistoryButton as HTMLDivElement);
+				} else {
+					this.window.setTimeout(() => waitFn(), 300);
+				}
+			};
+			waitFn();
+		});
+	}
 
 	private attachCompactButton() {
 		const buttonRenderWrapper = this.window.document.createElement("div");
@@ -122,6 +141,23 @@ export class Settings {
 
 			new MutationObserver(() => {
 				if (!buttonContainer.querySelector(`#${this.prefix}-compact-button`)) {
+					buttonContainer.appendChild(buttonElement);
+				}
+			}).observe(buttonContainer, { childList: true });
+		});
+	}
+
+	private attachFullViewButton() {
+		const buttonRenderWrapper = this.window.document.createElement("div");
+		buttonRenderWrapper.innerHTML = fullButtonTemplate(this);
+		const buttonElement = buttonRenderWrapper.firstElementChild!;
+		buttonElement.addEventListener("click", () => this.showSettingsDialog());
+
+		this.waitForFullSidebarHistoryButton().then((historyButton) => {
+			const buttonContainer = historyButton.parentElement!;
+			buttonContainer.after(buttonElement);
+			new MutationObserver(() => {
+				if (!buttonContainer.querySelector(`#${this.prefix}-button`)) {
 					buttonContainer.appendChild(buttonElement);
 				}
 			}).observe(buttonContainer, { childList: true });
