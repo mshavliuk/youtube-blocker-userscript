@@ -1,6 +1,9 @@
 include ../info-tooltip/info-tooltip
 
 form(id=prefix)
+    if readOnly
+      div(class=prefix + '__readonly-notification')
+          | The setting are read only until the site is unblocked
     section(class=prefix + '__restricted-days')
         h3(class=prefix + '__section-header')
             | Restricted days
@@ -9,28 +12,32 @@ form(id=prefix)
           each val, index in ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.']
               li
                 label
-                    input(type='checkbox' name='days' value=index checked=formData.days.includes(index))
+                    input(type='checkbox' name='days' value=index checked=formData.days.includes(index) disabled=readOnly)
                     div(class=prefix + '__day-name')=val
     section(class=prefix + '__restricted-hours')
         h3(class=prefix + '__section-header')
             | Restricted hours
         label(class=prefix + '__field')
-            input(type='time' name='startTime' value=formData.startTime required)
+            input(type='time' name='startTime' value=formData.startTime required disabled=readOnly)
             | Start time
             +info-tooltip('Start of scheduled time when the site will be blocked')
         label(class=prefix + '__field')
-            input(type='time' name='endTime' value=formData.endTime required)
+            input(type='time' name='endTime' value=formData.endTime required disabled=readOnly)
             | End time
             +info-tooltip('End of scheduled restricted time')
         label(class=prefix + '__field')
-            input(type='number' name='dailyLimit' min='0' max='24' value=formData.dailyLimit)
+            input(type='number' name='dailyLimit' min='0' max='24' value=formData.dailyLimit disabled=readOnly)
             | Allowed hours per day
             +info-tooltip('The maximum amount of hours you can spend until the site will blocked')
         label(class=prefix + '__field')
-            input(type='checkbox' name='breakAllowed' checked=formData.breakAllowed)
+            input(type='checkbox' name='breakAllowed' checked=formData.breakAllowed disabled=readOnly)
             | Allow to make a break during restricted hours
             +info-tooltip('Enables the small time period to take a break and unlock the site')
         label(id=prefix + '__break-field' class=prefix + '__field' style="display: none;")
-            input(type='number' name='breakDuration' min='0' value=formData.breakDuration required)
+            input(type='number' name='breakDuration' min='0' value=formData.breakDuration required disabled=readOnly)
             | Break duration (minutes)
             +info-tooltip('The amount of time allowed to spend on the site during restricted hours. May be used for a lunch timeout.')
+        label(class=prefix + '__field')
+            input(type='checkbox' name='readonlyWhenBlocked' checked=formData.readonlyWhenBlocked disabled=readOnly)
+            | Restrict settings editing when blocked
+            +info-tooltip('Does not allow you to add "just a bit" more time after the block')
