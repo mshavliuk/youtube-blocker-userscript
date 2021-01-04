@@ -23,6 +23,7 @@ $prefix: #{$globalPrefix}__modal;
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 }
 
 .#{$prefix}__container {
