@@ -96,12 +96,21 @@ export class Settings {
 			this.bindFormInteraction(form);
 		}
 
-		return new Promise((resolve) => {
-			this.modal.show({ title: "Settings", content: templateElement }).then(
-				// TODO: add form validation
-				(result) => resolve(this.onSettingsSubmit(!readOnly && result, form))
-			);
-		});
+		return this.modal
+			.show({
+				title: "Settings",
+				content: templateElement,
+				validator: () => {
+					const data = this.normalizeFormData(form);
+					return this.validate(data);
+				},
+			})
+			.then((result) => {
+				if (!readOnly && result) {
+					return this.onSettingsSubmit(form);
+				}
+				return null;
+			});
 	}
 
 	private waitForCompactSidebar(): Promise<HTMLDivElement> {
@@ -199,14 +208,7 @@ export class Settings {
 		breakCheckbox.dispatchEvent(new Event("change"));
 	}
 
-	private onSettingsSubmit(
-		result: boolean,
-		form: HTMLFormElement
-	): null | SettingsData {
-		if (!result) {
-			return null;
-		}
-
+	private normalizeFormData(form: HTMLFormElement): SettingsData {
 		const formData = new FormData(form);
 		const strData = Array.from(formData.entries())
 			.filter((v) => !!v)
@@ -221,7 +223,7 @@ export class Settings {
 				? string[]
 				: string;
 		};
-		const data: SettingsData = {
+		return {
 			...this.defaults,
 			...strData,
 			breakAllowed: strData.breakAllowed === "on",
@@ -230,9 +232,32 @@ export class Settings {
 			days: Array.from(strData.days ?? []).map(Number),
 			readonlyWhenBlocked: strData.readonlyWhenBlocked === "on",
 		};
+	}
+
+	private onSettingsSubmit(form: HTMLFormElement): null | SettingsData {
+		const data = this.normalizeFormData(form);
 		this.setSettings(data);
 		this.notifyOnSettingsChange(data);
 		return data;
+	}
+
+	private validate(data: SettingsData) {
+		const errors: Partial<Record<keyof SettingsData, string>> = {};
+		if (
+			data.breakDuration !== null &&
+			(data.breakDuration < 0 || data.breakDuration > 1440)
+		) {
+			errors.breakDuration = "Break duration should be from 0 to 1440";
+		}
+
+		if (
+			data.dailyLimit !== null &&
+			(data.dailyLimit < 0 || data.dailyLimit > 24)
+		) {
+			errors.dailyLimit = "Allowed hours per day should be from 0 to 24";
+		}
+
+		return Object.keys(errors).length === 0 ? null : errors;
 	}
 
 	private notifyOnSettingsChange(data: SettingsData) {
