@@ -9,6 +9,7 @@ export interface ShowModalOptions {
 	content: string | HTMLElement;
 	closeButton: string | null;
 	okButton: string | null;
+	validator: (() => Partial<Record<string, string>> | null) | null;
 }
 
 @Service()
@@ -20,9 +21,10 @@ export class Modal {
 		content: "",
 		closeButton: "Close",
 		okButton: "Ok",
+		validator: null,
 	};
 
-	private okCallback: (() => void) | null = null;
+	private okCallback: (() => boolean) | null = null;
 
 	constructor(
 		container: Container,
@@ -44,9 +46,17 @@ export class Modal {
 			});
 
 			this.okCallback = () => {
-				this.okCallback = null;
+				if (options.validator) {
+					const errors = options.validator();
+					if (errors) {
+						this.window.alert(Object.values(errors).join("\n"));
+						return false;
+					}
+				}
 				resolve(true);
 				MicroModal.close(modalElement.id);
+				this.okCallback = null;
+				return true;
 			};
 		});
 	}
@@ -74,10 +84,12 @@ export class Modal {
 			"[data-micromodal-ok]"
 		)!;
 
-		okButton.addEventListener("click", () => {
+		okButton.addEventListener("click", (event) => {
+			event.preventDefault();
 			if (this.okCallback) {
-				this.okCallback();
+				return this.okCallback();
 			}
+			return true;
 		});
 
 		if (options.content instanceof HTMLElement) {
