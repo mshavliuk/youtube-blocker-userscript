@@ -7,7 +7,7 @@ form(id=prefix)
     section(class=prefix + '__restricted-days')
         h3(class=prefix + '__section-header')
             | Restricted days
-            +info-tooltip('Check the days when the site usage will be restricted by the schedule')
+            +info-tooltip('Site usage will be restricted during selected days')
         ul(class=prefix + '__days-list')
           each val, index in ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.']
               li
