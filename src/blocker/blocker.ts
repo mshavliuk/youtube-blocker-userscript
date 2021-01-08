@@ -3,8 +3,8 @@ import { Settings } from "../settings";
 import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
 import { Clock } from "../clock";
-import template from "./blocker.pug";
-import "./blocker.scss";
+import pageTemplate from "./blocker-page.pug";
+import "./blocker-page.scss";
 
 export type BlockReason = "schedule" | "limit" | "breakEnd";
 
@@ -161,7 +161,7 @@ export class Blocker {
 		} else {
 			unlockTime = this.settings.getSetting("endTime");
 		}
-		wrapper.innerHTML = template({
+		wrapper.innerHTML = pageTemplate({
 			...this,
 			spentTime: this.clock.getTimeSpent(),
 			reason,
