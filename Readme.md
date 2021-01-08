@@ -20,11 +20,33 @@ The most common way to install the Youtube blocker is by using the userscript br
 
 For those who use the Adguard software, it's possible to add the user extension once and for all browsers in the system. See the instructions for [Macos](https://kb.adguard.com/en/macos/features/extensions) and [Windows](https://kb.adguard.com/en/windows/features/extensions)
 
-### Usage
+### 🙌 Usage
 
 First time you enter Youtube after script installation you will be asked configure the script for your usage. You can move your cursor over the question mark icon to see the explanation about each setting option.
 
 You will also able to open the settings dialog later by clicking the new button appeared in the left sidebar.
+
+### 📸 Extension screenshots
+<details>
+<summary>See under toggle</summary>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>Settings button</i>
+<br />
+<img src=".github/screenshots/buttons-demo.png" width="400"/>
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>Settings window</i>
+<br />
+<img src=".github/screenshots/settings-demo.png" width="400"/>
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>Block page</i>
+<br />
+<img src=".github/screenshots/blocker-demo.png" width="400"/>
+</details>
 
 ## 🗄 Change log
 
