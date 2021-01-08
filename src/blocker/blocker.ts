@@ -4,13 +4,23 @@ import { Modal } from "../modal";
 import { WINDOW_TOKEN } from "../window-token";
 import { Clock } from "../clock";
 import pageTemplate from "./blocker-page.pug";
+import breakTemplate from "./blocker-break-modal.pug";
 import "./blocker-page.scss";
+import "./blocker-break-modal.scss";
 
 export type BlockReason = "schedule" | "limit" | "breakEnd";
+
+export type BlockerStore = {
+	break: {
+		value: boolean;
+		expire: string;
+	};
+};
 
 @Service()
 export class Blocker {
 	public readonly prefix = `${HTML_PREFIX}__blocker`;
+	private readonly STORE_KEY = `${STORE_PREFIX} Blocker`;
 
 	private set timerId(value: number | null) {
 		if (this._timerId) {
@@ -108,38 +118,52 @@ export class Blocker {
 			(this.settings.getSetting("breakDuration") ?? 0) * 60 * 1000 -
 				this.clock.getBreakTimeSpent()
 		);
+		const breakState = this.getBreakState();
 
-		if (
+		if (reason === "schedule" && breakState) {
+			this.block(reason);
+		} else if (
 			reason === "schedule" &&
 			this.settings.getSetting("breakAllowed") &&
 			breakTimeLeft > 0
 		) {
+			if (breakState === false) {
+				this.breakStart(breakTimeLeft);
+				return;
+			}
+			const templateElement = this.window.document.createElement("div");
+			templateElement.innerHTML = breakTemplate({
+				...this,
+				hostname: this.window.location.hostname,
+				breakTimeLeft: breakTimeLeft / 60 / 1000,
+			});
 			this.modal
 				.show({
 					title: "Block",
-					content: `You seem to visit the ${
-						this.window.location.hostname
-					} in restricted time, but you can take a break (${(
-						breakTimeLeft /
-						60 /
-						1000
-					).toFixed(1)} minutes have left)`,
+					content: templateElement,
 					okButton: "Take a break",
 					closeButton: "Block",
 				})
 				.then((ok) => {
-					if (!ok) {
-						this.block(reason);
-						return;
+					const form = templateElement.querySelector(
+						`#${this.prefix}-break-modal`
+					) as HTMLFormElement;
+
+					const formData = new FormData(form);
+					if (formData.get("remember") === "on") {
+						this.saveState({
+							break: {
+								value: !ok,
+								expire: new Date().toISOString().slice(0, 10),
+							},
+						});
 					}
 
-					this.clock.startBreakPeriod();
-					this.timerId = this.window.setTimeout(() => {
-						const blockData = this.getBlockData();
-						if (blockData) {
-							this.handleBlock("breakEnd");
-						}
-					}, breakTimeLeft);
+					if (!ok) {
+						this.block(reason);
+					} else {
+						this.breakStart(breakTimeLeft);
+					}
 				});
 			return;
 		} else {
@@ -150,6 +174,37 @@ export class Blocker {
 			});
 			return;
 		}
+	}
+
+	private breakStart(breakTimeLeft: number) {
+		this.clock.startBreakPeriod();
+		this.timerId = this.window.setTimeout(() => {
+			const blockData = this.getBlockData();
+			if (blockData) {
+				this.handleBlock("breakEnd");
+			}
+		}, breakTimeLeft);
+	}
+
+	private getBreakState() {
+		const state = this.loadState();
+		if (!state || state.break.expire < new Date().toISOString().slice(0, 10)) {
+			return null;
+		}
+
+		return state.break.value;
+	}
+
+	private loadState(): BlockerStore | null {
+		const strData = this.window.localStorage.getItem(this.STORE_KEY);
+		if (strData === null) {
+			return null;
+		}
+		return JSON.parse(strData);
+	}
+
+	private saveState(state: BlockerStore) {
+		this.window.localStorage.setItem(this.STORE_KEY, JSON.stringify(state));
 	}
 
 	private block(reason: BlockReason) {
