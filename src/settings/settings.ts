@@ -279,6 +279,20 @@ export class Settings {
 			errors.dailyLimit = "Allowed hours per day should be from 0 to 24";
 		}
 
+		if (!data.endTime && !!data.startTime) {
+			errors.endTime =
+				"You cannot leave the end time empty when the start time is specified";
+		}
+
+		if (!data.startTime && !!data.endTime) {
+			errors.endTime =
+				"You cannot leave the start time empty when the end time is specified";
+		}
+
+		if (data.startTime && data.endTime && data.startTime >= data.endTime) {
+			errors.endTime = "Start time cannot be before or equal the end time";
+		}
+
 		return Object.keys(errors).length === 0 ? null : errors;
 	}
 
