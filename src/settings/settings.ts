@@ -194,15 +194,37 @@ export class Settings {
 				breakDurationField.setAttribute("style", "display: none");
 			}
 		});
-		form.querySelectorAll("[type='time']").forEach((input) => {
-			flatpickr(input, {
-				enableTime: true,
-				noCalendar: true,
-				dateFormat: "H:i",
-				time_24hr: true,
-				static: true,
+		form
+			.querySelectorAll<HTMLInputElement>("input[type='time']")
+			.forEach((input) => {
+				const picker = flatpickr(input, {
+					enableTime: true,
+					noCalendar: true,
+					dateFormat: "H:i",
+					time_24hr: true,
+					static: true,
+				});
+
+				const preventFlatpickrSetDefault = (e: Event, reset: boolean) => {
+					const value = input.value;
+					picker.close();
+					picker.clear(true, false);
+					e.stopPropagation();
+					e.preventDefault();
+					setTimeout(() => (input.value = reset ? "" : value));
+				};
+				picker.timeContainer?.addEventListener("keydown", (e) => {
+					switch (e.code) {
+						case "Escape":
+							preventFlatpickrSetDefault(e, false);
+							break;
+						case "Backspace":
+						case "Delete":
+							preventFlatpickrSetDefault(e, true);
+							break;
+					}
+				});
 			});
-		});
 
 		// triggers initial state
 		breakCheckbox.dispatchEvent(new Event("change"));
