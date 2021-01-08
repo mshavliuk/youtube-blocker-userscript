@@ -1,0 +1,8 @@
+- var prefix = prefix + '-break-modal'
+
+form(id=prefix)
+    div(class=prefix + '__message')
+        | You seem to visit the #{ hostname } in restricted time, but you can take a break (#{ breakTimeLeft.toFixed(1) } minutes have left)
+    label(class=prefix + '__field')
+        input(type='checkbox' name='remember')
+        | Don't ask me today any more

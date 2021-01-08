@@ -1,0 +1,11 @@
+@import "../global";
+
+$prefix: #{$globalPrefix}__blocker-break-modal;
+
+.#{$prefix}__message {
+  margin: 0 0 1em;
+}
+
+##{$prefix} input {
+  margin-right: 1em;
+}
