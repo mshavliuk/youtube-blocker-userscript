@@ -28,24 +28,24 @@ You will also able to open the settings dialog later by clicking the new button 
 
 ### 📸 Extension screenshots
 <details>
-<summary>See under toggle</summary>
+<summary><b>See under the toggle</b></summary>
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <i>Settings button</i>
 <br />
-<img src=".github/screenshots/buttons-demo.png" width="400"/>
+<img src=".github/screenshots/buttons-demo.png" width="600"/>
 <br />
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <i>Settings window</i>
 <br />
-<img src=".github/screenshots/settings-demo.png" width="400"/>
+<img src=".github/screenshots/settings-demo.png" width="600"/>
 <br />
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <i>Block page</i>
 <br />
-<img src=".github/screenshots/blocker-demo.png" width="400"/>
+<img src=".github/screenshots/blocker-demo.png" width="600"/>
 </details>
 
 ## 🗄 Change log
