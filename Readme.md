@@ -12,6 +12,8 @@ The latest stable script version can be found here: https://github.com/mshavliuk
 
 All you need is just add that link to your userscript list (see more about it below).
 
+When you rich your scheduled restricted hours, the youtube will be blocked till the end of your working time or until the following day if your daily time limit is over.
+
 #### 🧩 Browser extensions
 
 The most common way to install the Youtube blocker is by using the userscript browser extension. There is a variety of options, which can be found [here](https://openuserjs.org/about/Userscript-Beginners-HOWTO)
@@ -27,6 +29,7 @@ First time you enter Youtube after script installation you will be asked configu
 You will also able to open the settings dialog later by clicking the new button appeared in the left sidebar.
 
 ### 📸 Extension screenshots
+
 <details>
 <summary><b>See under the toggle</b></summary>
 <br />
