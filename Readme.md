@@ -46,6 +46,12 @@ You will also able to open the settings dialog later by clicking the new button 
 <br />
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>Take-a-break window</i>
+<br />
+<img src=".github/screenshots/break-demo.png" width="600"/>
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <i>Block page</i>
 <br />
 <img src=".github/screenshots/blocker-demo.png" width="600"/>
